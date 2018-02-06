@@ -5,6 +5,8 @@
  */
 package models;
 
+import views.MainMenu;
+
 /**
  *
  * @author 30207717
@@ -15,7 +17,8 @@ public class AidanAssessment {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        MainMenu mainMenu = new MainMenu();
+        mainMenu.setVisible(true);
     }
     
 }

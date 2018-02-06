@@ -28,19 +28,19 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="lblGreeting" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="btnUnregister" alignment="0" max="32767" attributes="0"/>
-                          <Component id="btnProducts" min="-2" pref="85" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="btnProducts" min="-2" pref="93" max="-2" attributes="0"/>
+                          <Component id="btnUnregister" pref="97" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnOrders" min="-2" pref="85" max="-2" attributes="0"/>
                           <Component id="btnEditDetails" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnOrders" min="-2" pref="94" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="btnLogOut" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="107" max="32767" attributes="0"/>
+              <EmptySpace pref="98" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -90,18 +90,27 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnOrders">
       <Properties>
-        <Property name="text" type="java.lang.String" value="My Orders"/>
+        <Property name="text" type="java.lang.String" value="My Order"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOrdersActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnEditDetails">
       <Properties>
         <Property name="text" type="java.lang.String" value="Edit Details"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditDetailsActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnUnregister">
       <Properties>
         <Property name="text" type="java.lang.String" value="Unregister"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUnregisterActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

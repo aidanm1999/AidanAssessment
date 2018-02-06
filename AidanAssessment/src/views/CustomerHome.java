@@ -7,20 +7,22 @@ package views;
 
 import models.Customer;
 
-/**
- *
- * @author jahood
- */
+//Author - Aidan Marshall
 public class CustomerHome extends javax.swing.JFrame {
 
     /**
      * Creates new form ZooKeeperHome
      */
+    
+    private Customer loggedInCustomer;
+    private CustomerHome loggedInCustomerHome;
+    
     public CustomerHome(Customer customer) 
     {
         
         initComponents();
         
+        loggedInCustomer = customer;
         lblGreeting.setText("Welcome " + customer.getFirstName() + " " + customer.getLastName() + ", enjoy shopping!");
         
     }
@@ -59,11 +61,26 @@ public class CustomerHome extends javax.swing.JFrame {
             }
         });
 
-        btnOrders.setText("My Orders");
+        btnOrders.setText("My Order");
+        btnOrders.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrdersActionPerformed(evt);
+            }
+        });
 
         btnEditDetails.setText("Edit Details");
+        btnEditDetails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditDetailsActionPerformed(evt);
+            }
+        });
 
         btnUnregister.setText("Unregister");
+        btnUnregister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnregisterActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -74,15 +91,15 @@ public class CustomerHome extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblGreeting)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnUnregister, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUnregister, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnOrders, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEditDetails)))
+                            .addComponent(btnEditDetails)
+                            .addComponent(btnOrders, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(btnLogOut))
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addContainerGap(98, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -106,14 +123,35 @@ public class CustomerHome extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
-            MainMenu mainMenu = new MainMenu();
-            this.dispose();
-            mainMenu.setVisible(true);
+        MainMenu mainMenu = new MainMenu();
+        this.dispose();
+        mainMenu.setVisible(true);
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void btnProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductsActionPerformed
         
+        CustomerViewProducts customerViewProducts = new CustomerViewProducts(loggedInCustomer);
+        this.dispose();
+        customerViewProducts.setVisible(true);
     }//GEN-LAST:event_btnProductsActionPerformed
+
+    private void btnEditDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditDetailsActionPerformed
+        CustomerEditDetails customerEditDetails = new CustomerEditDetails(loggedInCustomer);
+        this.dispose();
+        customerEditDetails.setVisible(true);
+    }//GEN-LAST:event_btnEditDetailsActionPerformed
+
+    private void btnUnregisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnregisterActionPerformed
+        CustomerUnregisterVerification customerUnregisterVerification = new CustomerUnregisterVerification(loggedInCustomer);
+        customerUnregisterVerification.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnUnregisterActionPerformed
+
+    private void btnOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdersActionPerformed
+        Basket basket = new Basket(loggedInCustomer);
+        this.dispose();
+        basket.setVisible(true);
+    }//GEN-LAST:event_btnOrdersActionPerformed
 
     /**
      * @param args the command line arguments

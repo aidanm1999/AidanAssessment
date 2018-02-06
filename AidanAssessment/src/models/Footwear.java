@@ -9,16 +9,16 @@ public class Footwear extends Product
 
     
     
-    public int get_size() 
+    public int getSize() 
     {
         return size;
     }
 
     
     
-    public void set_size(int size_in) 
+    public void setSize(int sizeIn) 
     {
-        size_in = size;
+        sizeIn = size;
     }
     
     
@@ -30,11 +30,11 @@ public class Footwear extends Product
     }
     
     
-    public Footwear(int product_ID_in, String product_name_in, double price_in, int stock_level_in, int size_in)
+    public Footwear(int product_ID_in, String product_name_in, double price_in, int stock_level_in, int sizeIn)
     {
 
         super(product_ID_in, product_name_in, price_in, stock_level_in);
-        size = size_in;
+        size = sizeIn;
 
     }
     

@@ -7,55 +7,59 @@ public class Product
     
     //Attributes
 	
-    private int product_ID;
-    private String product_name;
+    private int productId;
+    private String productName;
     private double price;
-    private int stock_level;
+    private int stockLevel;
       
-    
-    
-    
-    public int get_product_ID() 
+    @Override
+    public String toString()
     {
-        return product_ID;
+        return productName;
+    }
+    
+    
+    public int getProductId() 
+    {
+        return productId;
     }
 
-    public String get_product_name() 
+    public String getProductName() 
     {
-        return product_name;
+        return productName;
     }
     
-    public double get_price() 
+    public double getPrice() 
     {
         return price;
     }
     
-    public int get_stock_level() 
+    public int getStockLevel() 
     {
-        return stock_level;
+        return stockLevel;
     }
     
     
     
     
-    public void set_product_ID(int product_ID_in) 
+    public void setProductId(int productIdIn) 
     {
-        product_ID_in = product_ID;
-    }
-
-    public void set_product_name(String product_name_in) 
-    {
-        product_name_in = product_name;
+        productIdIn = productId;
     }
 
-    public void set_price(double price_in) 
+    public void setProductName(String productNameIn) 
     {
-        price_in = price;
+        productNameIn = productName;
     }
 
-    public void set_stock_level(int stock_level_in) 
+    public void setPrice(double priceIn) 
     {
-        stock_level_in = stock_level;
+        priceIn = price;
+    }
+
+    public void setStockLevel(int stockLevelIn) 
+    {
+        stockLevelIn = stockLevel;
     }
         
 	
@@ -66,10 +70,10 @@ public class Product
     public Product()
     {
 
-    product_ID = 0;
-    product_name = "";
+    productId = 0;
+    productName = "";
     price = 0;
-    stock_level = 0;
+    stockLevel = 0;
 
 
     }
@@ -77,13 +81,13 @@ public class Product
     
     //Overloded 
     
-    public Product(int product_ID_in, String product_name_in, double price_in, int stock_level_in)
+    public Product(int productIdIn, String productNameIn, double priceIn, int stockLevelIn)
     {
 
-    product_ID = product_ID_in;
-    product_name = product_name_in;
-    price = price_in;
-    stock_level = stock_level_in;
+    productId = productIdIn;
+    productName = productNameIn;
+    price = priceIn;
+    stockLevel = stockLevelIn;
 
 
     }

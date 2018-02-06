@@ -13,12 +13,11 @@ import models.Staff;
  */
 public class StaffHome extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ZooKeeperHome
-     */
+    private Staff loggedInStaff;
+     
     public StaffHome(Staff staff) {
         initComponents();
-        
+        loggedInStaff = staff;
         lblGreeting.setText("Welcome " + staff.getFirstName() + " " + staff.getLastName() + ", enjoy working!");
     }
 
@@ -61,19 +60,21 @@ public class StaffHome extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(151, 151, 151)
-                .addComponent(btnLogOut)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(65, 65, 65)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnProducts)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(lblGreeting)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
-                .addComponent(btnOrders)
-                .addGap(87, 87, 87))
+                        .addGap(151, 151, 151)
+                        .addComponent(btnLogOut))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnProducts)
+                                .addGap(67, 67, 67)
+                                .addComponent(btnOrders))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(27, 27, 27)
+                                .addComponent(lblGreeting)))))
+                .addGap(87, 128, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -99,7 +100,7 @@ public class StaffHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void btnProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductsActionPerformed
-        StaffViewProducts staffViewProducts = new StaffViewProducts();
+        StaffViewProducts staffViewProducts = new StaffViewProducts(loggedInStaff);
         this.dispose();
         staffViewProducts.setVisible(true);
     }//GEN-LAST:event_btnProductsActionPerformed

@@ -9,16 +9,16 @@ public class Clothing extends Product
 
     
     
-    public String get_measurement() 
+    public String getMeasurement() 
     {
         return measurement;
     }
 
     
     
-    public void set_measurement(String measurement_in) 
+    public void setMeasurement(String measurementIn) 
     {
-        measurement_in = measurement;
+        measurementIn = measurement;
     }
     
     

@@ -14,9 +14,6 @@ import models.DBManager;
  */
 public class CustomerLogin extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ZooKeeperLogin
-     */
     public CustomerLogin() {
         initComponents();
     }
