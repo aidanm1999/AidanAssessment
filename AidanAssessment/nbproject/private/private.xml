@@ -4,10 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Aidan%20Marshall/Desktop/Projects/AidanAssessment/V1.1.2/src/models/DBManager.java</file>
-            <file>file:/C:/Users/Aidan%20Marshall/Desktop/Projects/AidanAssessment/V1.1.2/src/models/Customer.java</file>
-            <file>file:/C:/Users/Aidan%20Marshall/Desktop/Projects/AidanAssessment/V1.1.2/src/models/OrderLine.java</file>
-            <file>file:/C:/Users/Aidan%20Marshall/Desktop/Projects/AidanAssessment/V1.1.2/src/views/CustomerViewProducts.java</file>
-            <file>file:/C:/Users/Aidan%20Marshall/Desktop/Projects/AidanAssessment/V1.1.2/src/models/Order.java</file>
+            <file>file:/C:/Users/Aidan%20Marshall/Desktop/Projects/AidanAssessment/V1.1.2/src/models/Clothing.java</file>
+            <file>file:/C:/Users/Aidan%20Marshall/Desktop/Projects/AidanAssessment/V1.1.2/src/models/Footwear.java</file>
+            <file>file:/C:/Users/Aidan%20Marshall/Desktop/Projects/AidanAssessment/V1.1.2/src/views/StaffViewProducts.java</file>
+            <file>file:/C:/Users/Aidan%20Marshall/Desktop/Projects/AidanAssessment/V1.1.2/src/views/StaffEditProduct.java</file>
         </group>
     </open-files>
 </project-private>

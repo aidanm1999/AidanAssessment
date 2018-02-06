@@ -7,46 +7,45 @@ public class OrderLine
     
     //Attributes
 	
-    private int orderLineId;
-    private int orderLineQuantity;
-    private double orderLineTotal;
-    private Product product;
+    private int order_line_ID;
+    private int quantity;
+    private double line_total;
       
     
     
     
-    public int getOrderLineId() 
+    public int get_order_line_ID() 
     {
-        return orderLineId;
+        return order_line_ID;
     }
 
-    public int getOrderLineQuantity() 
+    public int get_quantity() 
     {
-        return orderLineQuantity;
+        return quantity;
     }
     
-    public double getLineTotal() 
+    public double get_line_total() 
     {
-        return orderLineTotal;
+        return line_total;
     }
     
     
     
     
     
-    public void setOrderLineId(int orderLineIdIn) 
+    public void set_order_line_ID(int order_line_ID_in) 
     {
-        orderLineIdIn = orderLineId;
-    }
-
-    public void setOrderLineQuantity(int orderLineQuantityIn) 
-    {
-        orderLineQuantityIn = orderLineQuantity;
+        order_line_ID_in = order_line_ID;
     }
 
-    public void setOrderLineTotal(double orderLineTotalIn) 
+    public void set_quantity(int quantity_in) 
     {
-        orderLineTotalIn = orderLineTotal;
+        quantity_in = quantity;
+    }
+
+    public void set_line_total(double line_total_in) 
+    {
+        line_total_in = line_total;
     }
 
 
@@ -59,9 +58,9 @@ public class OrderLine
     public OrderLine()
     {
 
-    orderLineId = 0;
-    orderLineQuantity = 1;
-    orderLineTotal = 0;
+    order_line_ID = 0;
+    quantity = 0;
+    line_total = 0;
 
 
     }
@@ -69,24 +68,14 @@ public class OrderLine
     
     //Overloded 
     
-    public OrderLine(int orderLineIdIn, int orderLineQuantityIn, double orderLineTotalIn)
+    public OrderLine(int order_line_ID_in, int quantity_in, double line_total_in)
     {
 
-    orderLineId = orderLineIdIn;
-    orderLineQuantity = orderLineQuantityIn;
-    orderLineTotal = orderLineTotalIn;
+    order_line_ID = order_line_ID_in;
+    quantity = quantity_in;
+    line_total = line_total_in;
 
 
     }
-    
-    
-    public OrderLine (Order orderIn, Product productIn)
-    {
-        orderLineId = orderIn.generateUniqueOrderLineId();
-        product = productIn;
-        orderLineQuantity = 1;
-        orderLineTotal = product.getCost() * quantity;
-    }
-    
     
 }

@@ -1,9 +1,6 @@
 
 package models;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 public class Customer extends User
 {
@@ -12,43 +9,8 @@ public class Customer extends User
     private String town;
     private String postcode;
     
-    private HashMap <Integer, Order> orders;
     
     
-    public Order findLatestOrder()
-    {
-        Order lastOrder = new Order();
-        if (orders.isEmpty())
-        {
-            addOrder(lastOrder);
-        }
-        else
-        {
-            lastOrder = orders.entrySet().iterator().next().getValue();
-            for(Map.Entry<Integer, Order> newOrderEntry : orders.entrySet())
-            {
-                if(newOrderEntry.getValue().getOrderDate().after(lastOrder.getOrderDate()))
-                {
-                    lastOrder = newOrderEntry.getValue();
-                }
-            }
-            
-            if (lastOrder.getOrderStatus().equals("Complete"))
-            {
-                addOrder(lastOrder);
-            }
-        }
-        
-        return lastOrder;
-    }
-    
-    public void addOrder(Order newOrder)
-    {
-        orders.put(newOrder.getOrderId(), newOrder);
-        DBManager db = new DBManager();
-        int orderId = db.addOrder(this.getUsername(), newOrder);
-        orders.get(newOrder.getOrderId()).setOrderId(orderId);
-    }
     
     public String getAddressLine1() 
     {

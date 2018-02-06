@@ -1,7 +1,6 @@
 package models;
 
 import java.util.Date;
-import java.util.Map;
 
 
 public class Order 
@@ -10,67 +9,55 @@ public class Order
     
     //Attributes
 	
-    private int orderId;
-    private Date orderDate;
-    private double orderTotal;
-    private String orderStatus;
+    private int order_ID;
+    private Date order_date;
+    private double order_total;
+    private String status;
       
     
-    public int generateUniqueOrderLineId()
-    {
-        int orderLineId = 0;
-        for(Map.Entry<Integer, OrderLine> orderLineEntry : orderLines.entrySet())
-        {
-            if (orderLines.containsKey(orderLineId))
-            {
-                orderLineId++;
-            }
-        }
-        
-        return orderLineId;
-    }
     
-    public int getOrderId() 
+    
+    public int get_order_ID() 
     {
-        return orderId;
+        return order_ID;
     }
 
-    public Date getOrderDate() 
+    public Date get_order_date() 
     {
-        return orderDate;
+        return order_date;
     }
     
-    public double getOrderTotal() 
+    public double get_order_total() 
     {
-        return orderTotal;
+        return order_total;
     }
     
-    public String getOrderStatus() 
+    public String get_status() 
     {
-        return orderStatus;
+        return status;
     }
     
     
     
     
-    public void setOrderId(int orderIdIn) 
+    public void set_order_ID(int order_ID_in) 
     {
-        orderIdIn = orderId;
-    }
-
-    public void setOrderDate(Date orderDateIn) 
-    {
-        orderDateIn = orderDate;
+        order_ID_in = order_ID;
     }
 
-    public void setOrderTotal(double orderTotalIn) 
+    public void set_order_date(Date order_date_in) 
     {
-        orderTotalIn = orderTotal;
+        order_date_in = order_date;
     }
 
-    public void setOrderStatus(String orderStatusIn) 
+    public void set_order_total(double order_total_in) 
     {
-        orderStatusIn = orderStatus;
+        order_total_in = order_total;
+    }
+
+    public void set_status(String status_in) 
+    {
+        status_in = status;
     }
         
 	
@@ -81,10 +68,10 @@ public class Order
     public Order()
     {
 
-    orderId = 0;
-    orderDate = new Date();
-    orderTotal = 0;
-    orderStatus = "Pending";
+    order_ID = 0;
+    order_date = new Date();
+    order_total = 0;
+    status = "";
 
 
     }
@@ -92,13 +79,13 @@ public class Order
     
     //Overloded 
     
-    public Order(int orderIdIn, Date orderDateIn, double orderTotalIn, String orderStatusIn)
+    public Order(int order_ID_in, Date order_date_in, double order_total_in, String status_in)
     {
 
-    orderId = orderIdIn;
-    orderDate = orderDateIn;
-    orderTotal = orderTotalIn;
-    orderStatus = orderStatusIn;
+    order_ID = order_ID_in;
+    order_date = order_date_in;
+    order_total = order_total_in;
+    status = status_in;
 
 
     }

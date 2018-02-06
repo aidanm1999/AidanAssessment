@@ -4,25 +4,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 
-
-
+//@author Aidan Marshall
 
 public class DBManager {
     
-    private final String connString = "jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.3\\database\\ShopDB.accdb";
-    
-    //CUSTOMERS-----------------------------------------------------------------
+     
     public HashMap<String, Customer> loadCustomers()
     {
         HashMap<String, Customer> customers = new HashMap<>();
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection(connString);
+            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Customers");
             
@@ -65,153 +60,13 @@ public class DBManager {
     
     
     
-    public Customer customerLogIn(String usernameIn, String passwordIn)
-    {
-        try
-        {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection(connString);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Customers WHERE Username = '" + usernameIn  + "' AND Password = '" + passwordIn + "'");
-            
-            if(!rs.next())
-            {
-                conn.close();
-                return null;
-            }
-            else
-            {
-                String username = rs.getString("Username");
-                String password = rs.getString("Password");
-                String firstName = rs.getString("FirstName");
-                String lastName = rs.getString("LastName");
-                String addressLine1 = rs.getString("AddressLine1");
-                String addressLine2 = rs.getString("AddressLine2");
-                String town = rs.getString("Town");
-                String postcode = rs.getString("Postcode"); 
-                
-                conn.close();
-                Customer customer = new Customer(username, password, firstName, 
-                        lastName, addressLine1, addressLine2, town, postcode);
-                return customer;
-            }
-        }
-        catch(Exception ex)
-        {
-            String message = ex.getMessage();
-            return null;
-        }
-    }
-    
-    
-    
-    public boolean registerCustomer(Customer newCustomer)
-    {
-        try
-        {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection(connString);
-            Statement stmt = conn.createStatement();
-            
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Customers WHERE Username = '" + newCustomer.getUsername()  + "' AND Password = '" + newCustomer.getPassword() + "'");
-            
-            if (rs.next())
-            {
-                return false;
-                
-            }
-            else
-            {
-                stmt.executeUpdate("INSERT INTO Customers (Username, Password, FirstName, LastName, AddressLine1, AddressLine2, Town, Postcode)" +
-                    "VALUES ('"+newCustomer.getUsername()+"','"+newCustomer.getPassword()+"','"+newCustomer.getFirstName()+"',"
-                            + "'"+newCustomer.getLastName()+"','"+newCustomer.getAddressLine1()+"','"+newCustomer.getAddressLine2()+"',"
-                            + "'"+newCustomer.getTown()+"','"+newCustomer.getPostcode()+"')");
-                
-                return true;
-            }
-            
-            
-            
-        }
-        catch (Exception ex)
-        {
-            String message = ex.getMessage();
-            return false;
-            
-        }
-        
-    }
-    
-    
-    
-    public boolean updateCustomer(Customer customer)
-    {
-        try
-        {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection(connString);
-            Statement stmt = conn.createStatement();
-            
-            
-            stmt.executeUpdate("UPDATE Customers "
-                    + "SET Username = '" +customer.getUsername()+ "', Password = '"+customer.getPassword()+"', FirstName = '"+customer.getFirstName()+"', LastName = '"+customer.getLastName()+"', AddressLine1 = '"+customer.getAddressLine1()+"', AddressLine2 = '"+customer.getAddressLine2()+"', Town = '"+customer.getTown()+"', Postcode = '"+customer.getPostcode()+"' "
-                    + "WHERE Username = '"+customer.getUsername()+"'");
-
-            return true;
-            
-            
-            
-            
-        }
-        catch (Exception ex)
-        {
-            String message = ex.getMessage();
-            return false;
-            
-        }
-        
-    }
-    
-    
-    
-    
-    
-        public void deleteCustomer(Customer customer)
-    {
-        try
-        {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection(connString);
-            Statement stmt = conn.createStatement();
-            
-            stmt.executeUpdate("DELETE FROM Customers WHERE Username = '" + 
-                    customer.getUsername() + "'");
-            conn.close();
-        }
-        catch(Exception ex)
-        {
-            String message = ex.getMessage();
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //PRODUCTS------------------------------------------------------------------
     public HashMap<Integer, Product> loadProducts()
     {
         HashMap<Integer, Product> products = new HashMap<>();
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection(connString);
+            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Products");
             
@@ -251,67 +106,58 @@ public class DBManager {
     
     
     
-    public boolean registerClothing(Clothing newClothing)
+    
+    
+    //Read sigle row from database
+    
+    
+    public Customer customerLogIn(String usernameIn, String passwordIn)
     {
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection(connString);
+            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
             Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Customers WHERE Username = '" + usernameIn  + "' AND Password = '" + passwordIn + "'");
             
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Products WHERE ProductName = '" + newClothing.getProductName()+ "'");
-            
-            if (rs.next())
+            if(!rs.next())
             {
-                return false;
-                
+                conn.close();
+                return null;
             }
             else
             {
+                String username = rs.getString("Username");
+                String password = rs.getString("Password");
+                String firstName = rs.getString("FirstName");
+                String lastName = rs.getString("LastName");
+                String addressLine1 = rs.getString("AddressLine1");
+                String addressLine2 = rs.getString("AddressLine2");
+                String town = rs.getString("Town");
+                String postcode = rs.getString("Postcode"); 
                 
-                stmt.executeUpdate("INSERT INTO Products (ProductName, Price, StockLevel, Measurement)" +
-                    "VALUES ('"+newClothing.getProductName()+"','"+newClothing.getPrice()+"','"+newClothing.getStockLevel()+"','"+newClothing.getMeasurement()+"')");
-                
-                return true;
+                conn.close();
+                Customer customer = new Customer(username, password, firstName, 
+                        lastName, addressLine1, addressLine2, town, postcode);
+                return customer;
+            }
         }
-            
-            
-            
-        }
-        catch (Exception ex)
+        catch(Exception ex)
         {
             String message = ex.getMessage();
-            return false;
-            
+            return null;
         }
-        
-    }
+    }   
+
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //STAFF---------------------------------------------------------------------
     public Staff staffLogIn(String usernameIn, String passwordIn)
     {
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection(connString);
+            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Staff WHERE Username = '" + usernameIn  + "' AND Password = '" + passwordIn + "'");
             
@@ -343,12 +189,93 @@ public class DBManager {
     
     
     
+    
+    
+    
+    //Write sigle row to database
+    
+    
+    public boolean registerCustomer(Customer newCustomer)
+    {
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
+            Statement stmt = conn.createStatement();
+            
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Customers WHERE Username = '" + newCustomer.getUsername()  + "' AND Password = '" + newCustomer.getPassword() + "'");
+            
+            if (rs.next())
+            {
+                return false;
+                
+            }
+            else
+            {
+                stmt.executeUpdate("INSERT INTO Customers (Username, Password, FirstName, LastName, AddressLine1, AddressLine2, Town, Postcode)" +
+                    "VALUES ('"+newCustomer.getUsername()+"','"+newCustomer.getPassword()+"','"+newCustomer.getFirstName()+"',"
+                            + "'"+newCustomer.getLastName()+"','"+newCustomer.getAddressLine1()+"','"+newCustomer.getAddressLine2()+"',"
+                            + "'"+newCustomer.getTown()+"','"+newCustomer.getPostcode()+"')");
+                
+                return true;
+            }
+            
+            
+            
+        }
+        catch (Exception ex)
+        {
+            String message = ex.getMessage();
+            return false;
+            
+        }
+        
+    }
+     
+    
+    public boolean registerClothing(Clothing newClothing)
+    {
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
+            Statement stmt = conn.createStatement();
+            
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Products WHERE ProductName = '" + newClothing.getProductName()+ "'");
+            
+            if (rs.next())
+            {
+                return false;
+                
+            }
+            else
+            {
+                
+                stmt.executeUpdate("INSERT INTO Products (ProductName, Price, StockLevel, Measurement)" +
+                    "VALUES ('"+newClothing.getProductName()+"','"+newClothing.getPrice()+"','"+newClothing.getStockLevel()+"','"+newClothing.getMeasurement()+"')");
+                
+                return true;
+        }
+            
+            
+            
+        }
+        catch (Exception ex)
+        {
+            String message = ex.getMessage();
+            return false;
+            
+        }
+        
+    }
+    
+    
     public boolean registerFootwear(Footwear newFootwear)
     {
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection(connString);
+            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
             Statement stmt = conn.createStatement();
             
             ResultSet rs = stmt.executeQuery("SELECT * FROM Products WHERE ProductName = '" + newFootwear.getProductName()  + "'");
@@ -378,162 +305,69 @@ public class DBManager {
         }
         
     }
+
+
+
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //ORDERS--------------------------------------------------------------------
-    public boolean findOrder(Customer customer, Product product, int quantity)
+
+    //Updates singe row in database
+
+    public boolean updateCustomer(Customer customer)
     {
-        
-        
         try
         {
-            Order openOrder = new Order();
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection(connString);
+            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Orders WHERE Username = '" + customer.getUsername() + "'");
             
-            if(!rs.next())
-            {
-                conn.close();
-            }
-            else
-            {
-                int orderId = rs.getInt("OrderId");
-                Date orderDate = rs.getDate("OrderDate");
-                Double orderTotal = rs.getDouble("OrderTotal");
-                String orderStatus = rs.getString("OrderStatus");
-                
-                if (orderStatus == "Open")
-                {
-                    openOrder = new Order(orderId, orderDate, orderTotal, orderStatus);
-                }
-                else
-                {
-                    openOrder = new Order();
-                    stmt.executeUpdate("INSERT INTO Orders (OrderDate, Username, OrderTotal, OrderStatus)" +
-                    "VALUES ('"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(openOrder.getOrderDate())+"','"+customer.getUsername()+"','"+openOrder.getOrderTotal()+"','"+openOrder.getOrderStatus()+"')");
-                    
-                    rs = stmt.executeQuery("SELECT * FROM Orders WHERE Username = '" + customer.getUsername() + "'");
-                    if(!rs.next())
-                    {
-                        conn.close();
-                    }
-                    else
-                    {
-                        orderId = rs.getInt("OrderId");
-                        orderDate = rs.getDate("OrderDate");
-                        orderTotal = rs.getDouble("OrderTotal");
-                        orderStatus = rs.getString("OrderStatus");
-                        
-                        openOrder = new Order(orderId, orderDate, orderTotal, orderStatus);
-                    }
-                }
+            
+            stmt.executeUpdate("UPDATE Customers "
+                    + "SET Username = '" +customer.getUsername()+ "', Password = '"+customer.getPassword()+"', FirstName = '"+customer.getFirstName()+"', LastName = '"+customer.getLastName()+"', AddressLine1 = '"+customer.getAddressLine1()+"', AddressLine2 = '"+customer.getAddressLine2()+"', Town = '"+customer.getTown()+"', Postcode = '"+customer.getPostcode()+"' "
+                    + "WHERE Username = '"+customer.getUsername()+"'");
 
-                OrderLine orderLine = new OrderLine(0, quantity, quantity * product.getPrice());
-            }
-            
-            
-            conn.close();
-            
             return true;
+            
+            
+            
+            
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             String message = ex.getMessage();
             return false;
-        }
-    }  
-    
-    
-    
-    
-    
-    
-    
-    public int addOrder(String personId, Order newOrder)
-    {
-        int orderId = 0;
-        
-        try
-        {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection(connString);
-            Statement stmt = conn.createStatement();
             
-            stmt.executeUpdate("INSERT INTO Orders (OrderDate, Username, OrderTotal, " +
-                    "Status) VALUES ('" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newOrder.getOrderDate()) +
-                    "','" + personId + "','" + newOrder.getOrderTotal() + "','" +
-                    newOrder.getOrderStatus() + "')");
-            
-            ResultSet rs = stmt.getGeneratedKeys();
-            
-            if(rs.next())
-            {
-                orderId = rs.getInt(1);
-            }
-            
-            conn.close();
-        }
-        catch(Exception ex)
-        {
-            String message = ex.getMessage();
         }
         
-        return orderId;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //ORDER LINES---------------------------------------------------------------
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-       
 
     
     
     
     
-    
-    
+    //Deletes singe row in database
+
+    public boolean deleteCustomer(Customer customer)
+    {
+        try
+        {
+
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
+            Statement stmt = conn.createStatement();
+            
+            
+            stmt.executeUpdate("DELETE FROM Customers WHERE Username ='" + customer.getUsername() + "'");
+
+            return true; 
+            
+        }
+        catch (Exception ex)
+        {
+            String message = ex.getMessage();
+            return false;
+            
+        }
+        
+    }
 
 }

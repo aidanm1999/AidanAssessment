@@ -61,12 +61,7 @@ public class CustomerHome extends javax.swing.JFrame {
             }
         });
 
-        btnOrders.setText("My Order");
-        btnOrders.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOrdersActionPerformed(evt);
-            }
-        });
+        btnOrders.setText("My Orders");
 
         btnEditDetails.setText("Edit Details");
         btnEditDetails.addActionListener(new java.awt.event.ActionListener() {
@@ -146,12 +141,6 @@ public class CustomerHome extends javax.swing.JFrame {
         customerUnregisterVerification.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnUnregisterActionPerformed
-
-    private void btnOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdersActionPerformed
-        Basket basket = new Basket(loggedInCustomer);
-        this.dispose();
-        basket.setVisible(true);
-    }//GEN-LAST:event_btnOrdersActionPerformed
 
     /**
      * @param args the command line arguments
