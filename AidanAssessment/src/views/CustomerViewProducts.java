@@ -86,6 +86,11 @@ public class CustomerViewProducts extends javax.swing.JFrame {
         spProducts.setViewportView(lstProducts);
 
         btnViewBasket.setText("View Basket");
+        btnViewBasket.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewBasketActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Quantity:");
 
@@ -210,6 +215,12 @@ public class CustomerViewProducts extends javax.swing.JFrame {
     private void btnAddToBasketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddToBasketActionPerformed
         lblMessage.setText("Item Not Added. Please add code.");
     }//GEN-LAST:event_btnAddToBasketActionPerformed
+
+    private void btnViewBasketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewBasketActionPerformed
+        CustomerBasket basket = new CustomerBasket();
+        basket.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnViewBasketActionPerformed
 
     
     public static void main(String args[]) {

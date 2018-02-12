@@ -183,6 +183,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Delete Product"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteProductActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblMessage">
     </Component>

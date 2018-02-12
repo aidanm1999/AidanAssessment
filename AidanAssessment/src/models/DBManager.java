@@ -10,14 +10,16 @@ import java.util.HashMap;
 
 public class DBManager {
     
-     
+    private final String connString = "jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Documents\\Projects\\AidanAssessment\\AidanAssessment\\database\\ShopDB.accdb"; 
+    
     public HashMap<String, Customer> loadCustomers()
     {
+
         HashMap<String, Customer> customers = new HashMap<>();
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Customers");
             
@@ -66,7 +68,7 @@ public class DBManager {
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Products");
             
@@ -116,7 +118,7 @@ public class DBManager {
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Customers WHERE Username = '" + usernameIn  + "' AND Password = '" + passwordIn + "'");
             
@@ -157,7 +159,7 @@ public class DBManager {
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Staff WHERE Username = '" + usernameIn  + "' AND Password = '" + passwordIn + "'");
             
@@ -200,7 +202,7 @@ public class DBManager {
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             
             ResultSet rs = stmt.executeQuery("SELECT * FROM Customers WHERE Username = '" + newCustomer.getUsername()  + "' AND Password = '" + newCustomer.getPassword() + "'");
@@ -238,7 +240,7 @@ public class DBManager {
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             
             ResultSet rs = stmt.executeQuery("SELECT * FROM Products WHERE ProductName = '" + newClothing.getProductName()+ "'");
@@ -275,7 +277,7 @@ public class DBManager {
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             
             ResultSet rs = stmt.executeQuery("SELECT * FROM Products WHERE ProductName = '" + newFootwear.getProductName()  + "'");
@@ -317,7 +319,7 @@ public class DBManager {
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             
             
@@ -352,7 +354,7 @@ public class DBManager {
         {
 
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\AidanAssessment\\V1.1.2\\database\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             
             

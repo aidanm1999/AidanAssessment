@@ -100,6 +100,11 @@ public class StaffViewProducts extends javax.swing.JFrame {
         });
 
         btnDeleteProduct.setText("Delete Product");
+        btnDeleteProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteProductActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -212,6 +217,10 @@ public class StaffViewProducts extends javax.swing.JFrame {
         selectedProduct = (Product)productObject;
         lblMessage.setText("");
     }//GEN-LAST:event_lstProductsValueChanged
+
+    private void btnDeleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteProductActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDeleteProductActionPerformed
 
     /**
      * @param args the command line arguments
