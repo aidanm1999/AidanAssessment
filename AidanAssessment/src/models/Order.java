@@ -1,6 +1,9 @@
 package models;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 
 public class Order 
@@ -8,86 +11,107 @@ public class Order
     
     
     //Attributes
-	
-    private int order_ID;
-    private Date order_date;
-    private double order_total;
+    
+    private int orderId;
+    private Date orderDate;
+    private double orderTotal;
     private String status;
+    private HashMap<Integer, OrderLine> orderLines;
       
     
-    
-    
-    public int get_order_ID() 
+    public void findLatestOrder()
     {
-        return order_ID;
-    }
-
-    public Date get_order_date() 
-    {
-        return order_date;
+        
     }
     
-    public double get_order_total() 
+    public int getOrderId(){return orderId;}
+    public Date getOrderDate(){return orderDate;}
+    public double getOrderTotal(){return orderTotal;}
+    public String getStatus(){return status;}
+    public HashMap<Integer, OrderLine> getOrderLines(){return orderLines;}
+    
+    public void setOrderId(int oId){orderId = oId;}
+    public void setOrderDate(Date oDate){orderDate = oDate;}
+    public void setOrderTotal(double oTotal){orderTotal = oTotal;}
+    public void setStatus(String oStatus){status = oStatus;}
+    public void setOrderLines(HashMap<Integer, OrderLine> oLines)
+    {orderLines = oLines;}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public void removeOrderLine(int productId)
     {
-        return order_total;
+        Iterator<Map.Entry<Integer, OrderLine>> iter = orderLines.entrySet().iterator();
+        while(iter.hasNext())
+        {
+            Map.Entry<Integer, OrderLine> entry = iter.next();
+            if(entry.getValue().getProduct().getProductId() == productId)
+            {
+                iter.remove();
+                orderTotal = orderTotal - entry.getValue().getLineTotal();
+                DBManager db = new DBManager();
+                
+                db.deleteOrderLine(orderId, productId);
+                db.updateOrderTotal(orderId, -entry.getValue().getLineTotal());
+            }
+        }
     }
     
-    public String get_status() 
+    public int generateUniqueOrderLineId()
     {
-        return status;
-    }
-    
-    
-    
-    
-    public void set_order_ID(int order_ID_in) 
-    {
-        order_ID_in = order_ID;
-    }
-
-    public void set_order_date(Date order_date_in) 
-    {
-        order_date_in = order_date;
-    }
-
-    public void set_order_total(double order_total_in) 
-    {
-        order_total_in = order_total;
-    }
-
-    public void set_status(String status_in) 
-    {
-        status_in = status;
+        int orderLineId = 0;
+        for(Map.Entry<Integer, OrderLine> orderLineEntry : orderLines.entrySet())
+        {
+            if (orderLines.containsKey(orderLineId))
+            {
+                orderLineId++;
+            }
+        }
+        
+        return orderLineId;
     }
         
 	
+    public void addOrderLine (OrderLine orderLine)
+    {
+        orderTotal = orderTotal + orderLine.getLineTotal();
+        orderLines.put(orderLine.getOrderLineId(), orderLine);
+        DBManager db = new DBManager();
+        db.addOrderLine(orderLine, orderId);
+    }
 
-
+    
+    
+    
+    
+    
     //Constrictor Method
 
     public Order()
     {
-
-    order_ID = 0;
-    order_date = new Date();
-    order_total = 0;
-    status = "";
-
-
+        orderId = 0;
+        orderDate = new Date();
+        orderTotal = 0;
+        status = "New";
+        orderLines = new HashMap<>();
     }
     
     
     //Overloded 
     
-    public Order(int order_ID_in, Date order_date_in, double order_total_in, String status_in)
+    public Order(int oId, Date oDate, double oTotal, String oStatus)
     {
-
-    order_ID = order_ID_in;
-    order_date = order_date_in;
-    order_total = order_total_in;
-    status = status_in;
-
-
+        orderId = oId;
+        orderDate = oDate;
+        orderTotal = oTotal;
+        status = oStatus;
+        orderLines = new HashMap<>();
     }
     
     

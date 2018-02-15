@@ -217,7 +217,7 @@ public class CustomerViewProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddToBasketActionPerformed
 
     private void btnViewBasketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewBasketActionPerformed
-        CustomerBasket basket = new CustomerBasket();
+        CustomerBasket basket = new CustomerBasket(loggedInCustomer);
         basket.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnViewBasketActionPerformed

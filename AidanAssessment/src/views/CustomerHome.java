@@ -62,6 +62,11 @@ public class CustomerHome extends javax.swing.JFrame {
         });
 
         btnOrders.setText("My Orders");
+        btnOrders.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrdersActionPerformed(evt);
+            }
+        });
 
         btnEditDetails.setText("Edit Details");
         btnEditDetails.addActionListener(new java.awt.event.ActionListener() {
@@ -141,6 +146,12 @@ public class CustomerHome extends javax.swing.JFrame {
         customerUnregisterVerification.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnUnregisterActionPerformed
+
+    private void btnOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdersActionPerformed
+        CustomerViewOrders viewOrders = new CustomerViewOrders(loggedInCustomer);
+        this.dispose();
+        viewOrders.setVisible(true);
+    }//GEN-LAST:event_btnOrdersActionPerformed
 
     /**
      * @param args the command line arguments

@@ -30,11 +30,11 @@ public class Clothing extends Product
     }
     
     
-    public Clothing(int product_ID_in, String product_name_in, double price_in, int stock_level_in, String measurement_in)
+    public Clothing(int productIdIn, String productNameIn, double priceIn, int stockLevelIn, String measurementIn)
     {
 
-        super(product_ID_in, product_name_in, price_in, stock_level_in);
-        measurement = measurement_in;
+        super(productIdIn, productNameIn, priceIn, stockLevelIn);
+        measurement = measurementIn;
 
     }
     
