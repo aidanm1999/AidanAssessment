@@ -54,6 +54,11 @@ public class StaffHome extends javax.swing.JFrame {
         });
 
         btnOrders.setText("Orders");
+        btnOrders.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrdersActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -104,6 +109,12 @@ public class StaffHome extends javax.swing.JFrame {
         this.dispose();
         staffViewProducts.setVisible(true);
     }//GEN-LAST:event_btnProductsActionPerformed
+
+    private void btnOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdersActionPerformed
+        StaffViewOrders StaffViewOrders = new StaffViewOrders(loggedInStaff);
+        this.dispose();
+        StaffViewOrders.setVisible(true);
+    }//GEN-LAST:event_btnOrdersActionPerformed
 
     /**
      * @param args the command line arguments

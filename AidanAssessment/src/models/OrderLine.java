@@ -17,12 +17,19 @@ public class OrderLine {
     public void setQuantity(int quantityIn){quantity = quantityIn;}
     public void setLineTotal(double total){lineTotal = total;}
     
-    public OrderLine (Order orderIn, Product productIn)
+    public OrderLine (Order orderIn, Product productIn, int quantityIn)
     {
         orderLineId = orderIn.generateUniqueOrderLineId();
         product = productIn;
-        quantity = 1;
+        quantity = quantityIn;
         lineTotal = product.getPrice() * quantity;
+    }
+    
+    
+    public OrderLine (Product productIn, int quantityIn)
+    {
+        product = productIn;
+        quantity = quantityIn;
     }
       
 }

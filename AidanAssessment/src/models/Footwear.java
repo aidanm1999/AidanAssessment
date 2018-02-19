@@ -18,7 +18,7 @@ public class Footwear extends Product
     
     public void setSize(int sizeIn) 
     {
-        sizeIn = size;
+        size = sizeIn;
     }
     
     

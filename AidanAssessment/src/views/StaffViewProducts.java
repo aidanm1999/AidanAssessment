@@ -219,7 +219,16 @@ public class StaffViewProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_lstProductsValueChanged
 
     private void btnDeleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteProductActionPerformed
-        // TODO add your handling code here:
+        if (selectedProduct != null)
+        {
+            DBManager db = new DBManager();
+            db.deleteProduct(selectedProduct);
+            lblMessage.setText("Product deleted.");
+        }
+        else
+        {
+            lblMessage.setText("Please select a product");
+        }
     }//GEN-LAST:event_btnDeleteProductActionPerformed
 
     /**

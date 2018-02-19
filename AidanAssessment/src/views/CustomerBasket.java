@@ -178,11 +178,11 @@ public class CustomerBasket extends javax.swing.JFrame {
             OrderLine actualOrderLine = olEntry.getValue();
             Product orderedProduct = actualOrderLine.getProduct();
 
-            orderedProduct.setIsAvailable(false);
-            db.updateProductAvailablility(orderedProduct);
+//            orderedProduct.setIsAvailable(false);
+//            db.updateProductAvailablility(orderedProduct);
         }
 
-        loggedInCustomer.findLatestOrder().setStatus("Complete");
+        loggedInCustomer.findLatestOrder().setStatus("Not complete");
         db.completeOrder(orderId);
 
         CustomerConfirmation confirmation = new CustomerConfirmation (loggedInCustomer, orderId);

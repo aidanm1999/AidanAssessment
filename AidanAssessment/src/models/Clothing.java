@@ -18,7 +18,7 @@ public class Clothing extends Product
     
     public void setMeasurement(String measurementIn) 
     {
-        measurementIn = measurement;
+        measurement = measurementIn;
     }
     
     

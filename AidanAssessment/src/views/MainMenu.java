@@ -107,7 +107,9 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnStaffLoginActionPerformed
 
     private void btnViewProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewProductsActionPerformed
-        // TODO add your handling code here:
+        UserViewProducts UserViewProducts = new UserViewProducts();
+        this.dispose();
+        UserViewProducts.setVisible(true);
     }//GEN-LAST:event_btnViewProductsActionPerformed
 
     /**

@@ -16,11 +16,11 @@ import models.Product;
 public class CustomerConfirmation extends javax.swing.JFrame {
 
     private Customer loggedInCustomer;
-    private HashMap<Integer, Product> products; 
     private Product selectedProduct;
     
     public CustomerConfirmation(Customer customer, int orderID) {
         initComponents();
+        loggedInCustomer = customer;
         lblMessage.setText("Order Has Been Placed! Order ID: " + orderID);
         
     }

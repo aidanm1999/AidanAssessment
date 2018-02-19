@@ -19,6 +19,10 @@ public class Customer extends User
     public Order findLatestOrder()
     {
         Order lastOrder = new Order();
+        
+        DBManager db = new DBManager();
+        orders = db.loadCustomerOrders(this);
+        
         if (orders.isEmpty())
         {
             addOrder(lastOrder);
@@ -47,6 +51,7 @@ public class Customer extends User
     
     public void addOrder(Order newOrder)
     {
+        
         orders.put(newOrder.getOrderId(), newOrder);
         DBManager db = new DBManager();
         int orderId = db.addOrder(this.getUsername(), newOrder);
@@ -86,22 +91,22 @@ public class Customer extends User
     
     public void set_address_line_1(String addressLine1In) 
     {
-        addressLine1In = addressLine1;
+        addressLine1 = addressLine1In;
     }
     
     public void setAddressLine_2(String addressLine2In) 
     {
-        addressLine2In = addressLine2;
+        addressLine2 = addressLine2In;
     }
 
     public void setTown(String townIn) 
     {
-        townIn = town;
+        town = townIn;
     }
 
     public void set_postcode(String postcodeIn) 
     {
-        postcodeIn = postcode;
+        postcode = postcodeIn;
     }
     
     

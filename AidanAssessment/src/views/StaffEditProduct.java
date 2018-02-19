@@ -157,7 +157,7 @@ public class StaffEditProduct extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(txtProductId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
@@ -206,13 +206,28 @@ public class StaffEditProduct extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUndoActionPerformed
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-        // TODO add your handling code here:
+        
+        selectedProduct.setProductName(txtProductName.getText());
+        selectedProduct.setPrice(Double.parseDouble(txtPrice.getText()));
+        selectedProduct.setStockLevel(Integer.parseInt(txtStockLevel.getText()));
+        DBManager db = new DBManager();
+        
+        if (selectedProduct.getClass().getName().equals("models.Clothing"))
+        {
+            db.updateClothing(selectedProduct, txtAdditional.getText());
+        }
+        else
+        {
+            db.updateFootwear(selectedProduct, Integer.parseInt(txtAdditional.getText()));
+        }
+        
+        lblMessage.setText("Updated!");
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        StaffHome staffHome = new StaffHome(loggedInStaff);
+        StaffViewProducts StaffViewProducts = new StaffViewProducts(loggedInStaff);
         this.dispose();
-        staffHome.setVisible(true);
+        StaffViewProducts.setVisible(true);
     }//GEN-LAST:event_btnBackActionPerformed
 
     /**

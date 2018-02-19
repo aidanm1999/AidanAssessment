@@ -254,8 +254,11 @@ public class DBManager {
             Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             
-            stmt.executeUpdate("UPDATE Orders SET OrderTotal= OrderTotal + '" + lineTotal+ "' WHERE OrderId= '" + orderId + "'");
+            
+            stmt.executeUpdate("UPDATE Orders SET OrderTotal= OrderTotal+ " + lineTotal +
+                    " WHERE OrderId= '" + orderId + "'");
             conn.close();
+            
         }
         catch(Exception ex)
         {
@@ -275,7 +278,7 @@ public class DBManager {
             Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             
-            stmt.executeUpdate("INSERT INTO Orders (OrderDate, ZooKeeper, OrderTotal, " +
+            stmt.executeUpdate("INSERT INTO Orders (OrderDate, Username, OrderTotal, " +
                     "Status) VALUES ('" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newOrder.getOrderDate()) +
                     "','" + personId + "','" + newOrder.getOrderTotal() + "','" +
                     newOrder.getStatus() + "')");
@@ -317,6 +320,66 @@ public class DBManager {
         }
     }
     
+    public void dispatchOrder(int orderId)
+    {
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(connString);
+            Statement stmt = conn.createStatement();
+            
+            stmt.executeUpdate("UPDATE Orders SET Status = 'Dispatched', OrderDate = '"+ 
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "'  WHERE OrderId= '" + orderId + "'");
+            conn.close();
+        }
+        catch(Exception ex)
+        {
+            String message = ex.getMessage();
+        }
+    }
+    
+    
+    
+
+    
+    public HashMap<Integer, Order> loadCustomerOrders(Customer customer)
+    {
+        HashMap<Integer, Order> customerOrders = new HashMap<>();
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(connString);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Orders WHERE Username = '"+customer.getUsername()+"'");
+            
+            while(rs.next())
+            {
+                Order loadedOrder = new Order(rs.getInt("OrderId"),rs.getDate("OrderDate"),rs.getDouble("OrderTotal"),rs.getString("Status"));
+                customerOrders.put(loadedOrder.getOrderId(), loadedOrder);
+            }
+        }
+        catch(Exception ex)
+        {
+           String message = ex.getMessage();
+        }
+        finally
+        {
+           return customerOrders; 
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -355,9 +418,8 @@ public class DBManager {
             Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             
-            stmt.executeUpdate("INSERT INTO OrderLines (OrderLineId, AnimalId, Quantity, LineTotal, " +
-                    "OrderId) VALUES ('" + newOrderLine.getOrderLineId() +
-                    "','" + newOrderLine.getAnimal().getAnimalId() + "','" + newOrderLine.getQuantity()+ "','" +
+            stmt.executeUpdate("INSERT INTO OrderLines (OrderLineId, ProductId, Quantity, LineTotal, OrderId) VALUES ('" + newOrderLine.getOrderLineId() +
+                    "','" + newOrderLine.getProduct().getProductId() + "','" + newOrderLine.getQuantity()+ "','" +
                     newOrderLine.getLineTotal()+ "','" + orderId + "')");
             conn.close();
             
@@ -369,6 +431,47 @@ public class DBManager {
         }
     }
    
+    
+    
+    
+    
+    
+    
+    public HashMap<Integer, Integer> loadCustomerProductQuantities(Customer customer)
+    {
+
+        HashMap<Integer, Integer> customerProductQuantities = new HashMap<>();
+        try
+        {
+            Order loadedOrder = customer.findLatestOrder();
+        
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(connString);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM OrderLines WHERE OrderId = '"+loadedOrder.getOrderId()+"'");
+            
+            while(rs.next())
+            {
+                customerProductQuantities.put(rs.getInt("ProductId"), rs.getInt("Quantity"));
+            }
+            
+        }
+        catch(Exception ex)
+        {
+           String message = ex.getMessage();
+        }
+        finally
+        {
+           return customerProductQuantities; 
+        }
+    }
+    
+    
+    
+    
+
+    
+    
     
     
     
@@ -521,7 +624,81 @@ public class DBManager {
     
     
     
-    
+        public boolean deleteProduct(Product product)
+    {
+        try
+        {
+
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(connString);
+            Statement stmt = conn.createStatement();
+            
+            
+            stmt.executeUpdate("DELETE FROM Products WHERE ProductId ='" + product.getProductId() + "'");
+
+            return true; 
+            
+        }
+        catch (Exception ex)
+        {
+            String message = ex.getMessage();
+            return false;
+            
+        }
+        
+    }
+        
+        
+        
+        
+        
+        
+    public void updateFootwear(Product product, int size)
+    {
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(connString);
+            Statement stmt = conn.createStatement();
+            
+            stmt.executeUpdate("UPDATE Products SET ProductName = '"+product.getProductName()+"', Price = '"+product.getPrice()+"', StockLevel = '"+product.getStockLevel()+"', Size = '"+size+"', WHERE ProductId= '" + product.getProductId() + "'");
+            conn.close(); 
+        }
+        catch(Exception ex)
+        {
+            String message = ex.getMessage();
+        }
+    }
+        
+        
+        
+    public void updateClothing(Product product, String measurement)
+    {
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(connString);
+            Statement stmt = conn.createStatement();
+            
+            stmt.executeUpdate("UPDATE Products SET ProductName = '"+product.getProductName()+"', Price = '"+product.getPrice()+"', StockLevel = '"+product.getStockLevel()+"', Measurement = '"+measurement+"', WHERE ProductId= '" + product.getProductId() + "'");
+            conn.close(); 
+        }
+        catch(Exception ex)
+        {
+            String message = ex.getMessage();
+        }
+    }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
     
     
@@ -565,455 +742,4 @@ public class DBManager {
     
     
     
-    
-    
 }
-
-
-
-
-//    //ANIMALS-------------------------------------------------------------------
-//    public HashMap<Integer, Animal> loadAnimals()
-//    {
-//        HashMap<Integer, Animal> animals = new HashMap();
-//        
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            ResultSet rs = stmt.executeQuery("SELECT * FROM Animals");
-//            
-//            while(rs.next())
-//            {
-//                int animalId = rs.getInt("AnimalId");
-//                String name = rs.getString("AnimalName");
-//                int age = rs.getInt("Age");
-//                String type = rs.getString("Type");
-//                char gender = rs.getString("Gender").charAt(0);
-//                String location = rs.getString("Location");
-//                    
-//                String waterType = rs.getString("WaterType");
-//                
-//                boolean availability = rs.getBoolean("Availability");
-//                double cost = rs.getDouble("Cost");
-//                    
-//                if(waterType != null && !waterType.isEmpty())
-//                {
-//                    Fish loadedFish = new Fish(animalId, location, name, age, type, gender, waterType, availability, cost);
-//                    animals.put(animalId, loadedFish);
-//                }
-//                else
-//                {
-//                    boolean canFly = rs.getBoolean("CanFly");
-//                    Bird loadedBird = new Bird(animalId, location, name, age, type, gender, canFly, availability, cost);
-//                    animals.put(animalId, loadedBird);
-//                }
-//            }
-//            conn.close();
-//            return animals;
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//            return null;
-//        }
-//    }
-//    
-//    
-//    
-//    public void updateAnimal(Animal updateAnimal)
-//    {
-//        String canFly = "NULL";
-//        String waterType = "";
-//        
-//        if(updateAnimal.getClass().getName().equals("models.Bird"))
-//        {
-//            Bird updateBird = (Bird)updateAnimal;
-//            canFly = String.valueOf(updateBird.getCanFly());
-//        }
-//        else
-//        {
-//            Fish updateFish = (Fish)updateAnimal;
-//            waterType = updateFish.getWaterType();
-//        }
-//        
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            
-//            stmt.executeUpdate("UPDATE Animals SET AnimalName= '" + updateAnimal.getName() + "', "
-//                    + "Age= '" + updateAnimal.getAge() + "', Type= '" + updateAnimal.getType() + "', "
-//                    + "Gender= '" + updateAnimal.getGender() + "', Location= '" + updateAnimal.getLocation() + "', "
-//                    + "CanFly= " + canFly + ", WaterType= '" + waterType + "', Cost= '" + updateAnimal.getCost() + "' "
-//                            + "WHERE AnimalId= '" + updateAnimal.getAnimalId() + "'");
-//            conn.close();
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//        }
-//    }
-//    
-//    
-//    
-//    public void addAnimal(Animal newAnimal)
-//    {
-//        //boolean canFly = false;
-//        String canFly = "NULL";
-//        String waterType = "";
-//        
-//        if(newAnimal.getClass().getName().equals("models.Bird"))
-//        {
-//            Bird newBird = (Bird)newAnimal;
-//            canFly = String.valueOf(newBird.getCanFly());
-//        }
-//        else
-//        {
-//            Fish newFish = (Fish)newAnimal;
-//            waterType = newFish.getWaterType();
-//        }
-//        
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            
-//            stmt.executeUpdate("INSERT INTO Animals (AnimalName, Age, Type, Gender, " +
-//                    "Location, CanFly, WaterType, Availability, Cost) VALUES ('" + newAnimal.getName() +
-//                    "','" + newAnimal.getAge() + "','" + newAnimal.getType() + "','" +
-//                    newAnimal.getGender() + "','" + newAnimal.getLocation() + "'," +
-//                    canFly + ",'" + waterType + "',true,'" + newAnimal.getCost() + "')");
-//            conn.close();
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//        }
-//    }
-//    
-//    
-//    
-//    public void deleteAnimal(Animal newAnimal)
-//    {
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            
-//            stmt.executeUpdate("DELETE FROM Animals WHERE AnimalId = '" + 
-//                    newAnimal.getAnimalId() + "'");
-//            conn.close();
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//        }
-//    }
-//    
-//    
-//    
-//    public void updateAnimalAvailablility(Animal animal)
-//    {
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            
-//            stmt.executeUpdate("UPDATE Animals SET Availability = "+animal.getIsAvailable()+ " WHERE AnimalId= '" + animal.getAnimalId() + "'");
-//            conn.close();
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//        }
-//    }
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    //ORDERS--------------------------------------------------------------------
-//    public void updateOrderTotal(int orderId, double lineTotal)
-//    {
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            
-//            stmt.executeUpdate("UPDATE Orders SET OrderTotal= OrderTotal + '" + lineTotal+ "' WHERE OrderId= '" + orderId + "'");
-//            conn.close();
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//        }
-//    }
-//    
-//    
-//    
-//    public int addOrder(String personId, Order newOrder)
-//    {
-//        int orderId = 0;
-//        
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            
-//            stmt.executeUpdate("INSERT INTO Orders (OrderDate, ZooKeeper, OrderTotal, " +
-//                    "Status) VALUES ('" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newOrder.getOrderDate()) +
-//                    "','" + personId + "','" + newOrder.getOrderTotal() + "','" +
-//                    newOrder.getStatus() + "')");
-//            
-//            ResultSet rs = stmt.getGeneratedKeys();
-//            
-//            if(rs.next())
-//            {
-//                orderId = rs.getInt(1);
-//            }
-//            
-//            conn.close();
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//        }
-//        
-//        return orderId;
-//    }
-//    
-//    
-//    
-//    public void completeOrder(int orderId)
-//    {
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            
-//            stmt.executeUpdate("UPDATE Orders SET Status = 'Complete', OrderDate = '"+ 
-//                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "'  WHERE OrderId= '" + orderId + "'");
-//            conn.close();
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//        }
-//    }
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    //ORDER LINES---------------------------------------------------------------
-//    public void deleteOrderLine(int orderId, int animalId)
-//    {
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            
-//            stmt.executeUpdate("DELETE FROM OrderLines WHERE AnimalId = '" + 
-//                    orderId + " AND AnimalId = '"+ animalId +"'");
-//            conn.close();
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//        }
-//    }
-//    
-//    
-//    
-//    public void addOrderLine(OrderLine newOrderLine, int orderId)
-//    {
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            
-//            stmt.executeUpdate("INSERT INTO OrderLines (OrderLineId, AnimalId, Quantity, LineTotal, " +
-//                    "OrderId) VALUES ('" + newOrderLine.getOrderLineId() +
-//                    "','" + newOrderLine.getAnimal().getAnimalId() + "','" + newOrderLine.getQuantity()+ "','" +
-//                    newOrderLine.getLineTotal()+ "','" + orderId + "')");
-//            conn.close();
-//            
-//            updateOrderTotal(orderId, newOrderLine.getLineTotal());
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//        }
-//    }
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    //ZOO KEEPERS---------------------------------------------------------------
-//    public ZooKeeper zooKeeperLogIn(String idIn, int pinNoIn)
-//    {
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            ResultSet rs = stmt.executeQuery("SELECT * FROM ZooKeepers WHERE PersonId = '" + idIn  + "' AND PinNo = '" + pinNoIn + "'");
-//            
-//            if(!rs.next())
-//            {
-//                conn.close();
-//                return null;
-//            }
-//            else
-//            {
-//                String personId = rs.getString("PersonId");
-//                String name = rs.getString("PersonName");
-//                Date dateHired = rs.getDate("DateHired");
-//                double salary = rs.getDouble("Salary");
-//                int pinNo = rs.getInt("PinNo");
-//                String telephoneNo = rs.getString("TelephoneNo");
-//                String emailAddress = rs.getString("EmailAddress");
-//                
-//                conn.close();
-//                ZooKeeper keeper = new ZooKeeper(personId, name, dateHired, 
-//                        salary, pinNo, telephoneNo, emailAddress);
-//                return keeper;
-//            }
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//            return null;
-//        }
-//    }
-//    
-//    public void updateZooKeeper(ZooKeeper updateKeeper)
-//    {      
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            
-//            stmt.executeUpdate("UPDATE ZooKeepers SET PersonName= '" + updateKeeper.getName() + "', "
-//                    + "DateHired= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(updateKeeper.getDateHired()) + "', " 
-//                    + "Salary= '" + updateKeeper.getSalary()+ "', "
-//                    + "PinNo= '" + updateKeeper.getPinNo()+ "', TelephoneNo= '" + updateKeeper.getTelephoneNo() + "', "
-//                    + "EmailAddress= '" + updateKeeper.getEmailAddress() + "' "
-//                            + "WHERE PersonId= '" + updateKeeper.getPersonId() + "'");
-//            conn.close();
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//        }
-//    }
-//    
-//    public HashMap<String, ZooKeeper> loadZooKeepers()
-//    {
-//        HashMap<String, ZooKeeper> keepers = new HashMap<>();
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = 
-//                    DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            ResultSet rs = stmt.executeQuery("SELECT * FROM ZooKeepers");
-//            
-//
-//            while(rs.next())
-//            {
-//                conn.close();
-//                String personId = rs.getString("PersonId");
-//                String name = rs.getString("PersonName");
-//                Date dateHired = rs.getDate("DateHired");
-//                double salary = rs.getDouble("Salary");
-//                int pinNo = rs.getInt("PinNo");
-//                String telephoneNo = rs.getString("TelephoneNo");
-//                String emailAddress = rs.getString("EmailAddress");
-//                
-//                ZooKeeper keeper = new ZooKeeper(personId, name, dateHired, 
-//                        salary, pinNo, telephoneNo, emailAddress);
-//                
-//                keepers.put(personId, keeper);
-//            }
-//        }
-//        catch(Exception ex)
-//        {
-//           String message = ex.getMessage();
-//        }
-//        finally
-//        {
-//           return keepers; 
-//        }
-//    }
-//    
-//    public boolean registerZooKeeper(ZooKeeper newKeeper)
-//    {
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            
-//            ResultSet rs = stmt.executeQuery("SELECT * FROM ZooKeepers WHERE PersonId = '" + newKeeper.getPersonId() + "'");
-//            if(rs.next())
-//            {
-//                conn.close();
-//                return false;
-//            }
-//            else
-//            {
-//                stmt.executeUpdate("INSERT INTO ZooKeepers (PersonId, PersonName, DateHired, Salary, PinNo, TelephoneNo, EmailAddress) " +
-//                    "VALUES ('" + newKeeper.getPersonId() + "','" + newKeeper.getName() + "','" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newKeeper.getDateHired()) + "','" +
-//                            newKeeper.getSalary() + "','" + newKeeper.getPinNo() + "','" + newKeeper.getTelephoneNo() + "','" + 
-//                            newKeeper.getEmailAddress() + "')");
-//                conn.close();
-//                return true;
-//            }
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//            return false;
-//        }
-//    }
-//    
-//    public void deleteZooKeeper(ZooKeeper keeper)
-//    {
-//        try
-//        {
-//            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://C:\\Users\\Aidan Marshall\\Desktop\\Projects\\ZooProject\\V1.5\\Data\\Database1.accdb");
-//            Statement stmt = conn.createStatement();
-//            
-//            stmt.executeUpdate("DELETE FROM ZooKeepers WHERE PersonId = '" + 
-//                    keeper.getPersonId() + "'");
-//            conn.close();
-//        }
-//        catch(Exception ex)
-//        {
-//            String message = ex.getMessage();
-//        }
-//    }
-//}

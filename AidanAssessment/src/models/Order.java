@@ -19,31 +19,13 @@ public class Order
     private HashMap<Integer, OrderLine> orderLines;
       
     
-    public void findLatestOrder()
+    public void addOrderLine (OrderLine orderLine)
     {
-        
+        orderTotal = orderTotal + orderLine.getLineTotal();
+        orderLines.put(orderLine.getOrderLineId(), orderLine);
+        DBManager db = new DBManager();
+        db.addOrderLine(orderLine, orderId);
     }
-    
-    public int getOrderId(){return orderId;}
-    public Date getOrderDate(){return orderDate;}
-    public double getOrderTotal(){return orderTotal;}
-    public String getStatus(){return status;}
-    public HashMap<Integer, OrderLine> getOrderLines(){return orderLines;}
-    
-    public void setOrderId(int oId){orderId = oId;}
-    public void setOrderDate(Date oDate){orderDate = oDate;}
-    public void setOrderTotal(double oTotal){orderTotal = oTotal;}
-    public void setStatus(String oStatus){status = oStatus;}
-    public void setOrderLines(HashMap<Integer, OrderLine> oLines)
-    {orderLines = oLines;}
-    
-    
-    
-    
-    
-    
-    
-    
     
     public void removeOrderLine(int productId)
     {
@@ -76,19 +58,28 @@ public class Order
         
         return orderLineId;
     }
-        
-	
-    public void addOrderLine (OrderLine orderLine)
-    {
-        orderTotal = orderTotal + orderLine.getLineTotal();
-        orderLines.put(orderLine.getOrderLineId(), orderLine);
-        DBManager db = new DBManager();
-        db.addOrderLine(orderLine, orderId);
-    }
+    
+    public int getOrderId(){return orderId;}
+    public Date getOrderDate(){return orderDate;}
+    public double getOrderTotal(){return orderTotal;}
+    public String getStatus(){return status;}
+    public HashMap<Integer, OrderLine> getOrderLines(){return orderLines;}
+    
+    public void setOrderId(int oId){orderId = oId;}
+    public void setOrderDate(Date oDate){orderDate = oDate;}
+    public void setOrderTotal(double oTotal){orderTotal = oTotal;}
+    public void setStatus(String oStatus){status = oStatus;}
+    public void setOrderLines(HashMap<Integer, OrderLine> oLines)
+    {orderLines = oLines;}
+    
+    
+    
+    
+    
+    
+    
+    
 
-    
-    
-    
     
     
     //Constrictor Method
@@ -98,7 +89,7 @@ public class Order
         orderId = 0;
         orderDate = new Date();
         orderTotal = 0;
-        status = "New";
+        status = "Opened";
         orderLines = new HashMap<>();
     }
     

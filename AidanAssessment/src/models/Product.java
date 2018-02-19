@@ -44,22 +44,22 @@ public class Product
     
     public void setProductId(int productIdIn) 
     {
-        productIdIn = productId;
+        productId = productIdIn;
     }
 
     public void setProductName(String productNameIn) 
     {
-        productNameIn = productName;
+        productName = productNameIn;
     }
 
     public void setPrice(double priceIn) 
     {
-        priceIn = price;
+        price = priceIn;
     }
 
     public void setStockLevel(int stockLevelIn) 
     {
-        stockLevelIn = stockLevel;
+        stockLevel = stockLevelIn;
     }
         
 	
