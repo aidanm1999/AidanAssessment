@@ -28,7 +28,7 @@ public class Customer extends User
         //Checks to see if the customer has an order 
         if (orders.isEmpty())
         {
-            //If the customer does not have an order, creates a new order
+            //If the customer does not have any orders, creates a new order
             addOrder(lastOrder);
         }
         else

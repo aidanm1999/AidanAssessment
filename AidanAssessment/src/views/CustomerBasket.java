@@ -29,7 +29,8 @@ public class CustomerBasket extends javax.swing.JFrame {
         
         loggedInCustomer = customer;
         customerOrder = order;
-        lblTotalCost.setText("£" + Double.toString(customerOrder.getOrderTotal()));
+        double totalCost = customerOrder.getOrderTotal();
+        
         
         DBManager db = new DBManager();
         HashMap<Integer, Product> products = db.loadProducts();
@@ -50,6 +51,9 @@ public class CustomerBasket extends javax.swing.JFrame {
                 orderedProduct.getPrice() * entry.getValue().getQuantity(),
             });
         }
+        
+        
+        lblTotalCost.setText("£" + Double.toString(customerOrder.getOrderTotal()));
     }
         
         

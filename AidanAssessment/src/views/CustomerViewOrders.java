@@ -3,9 +3,8 @@ package views;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import models.Customer;
+import models.DBManager;
 import models.Order;
-import models.OrderLine;
-import models.Product;
 
 //@author Aidan Marshall
 
@@ -17,18 +16,22 @@ public class CustomerViewOrders extends javax.swing.JFrame {
     public CustomerViewOrders(Customer customer) {
         initComponents();
         loggedInCustomer = customer;
-        Order order = loggedInCustomer.findLatestOrder();
         
-        for(Map.Entry<Integer, OrderLine> entry : order.getOrderLines().entrySet())
+        DefaultTableModel model = (DefaultTableModel)tblOrders.getModel();
+        
+        DBManager db = new DBManager();
+        for(Map.Entry<Integer, Order> entry : db.loadCustomerOrders(loggedInCustomer).entrySet())
         {
-            Product orderedProduct = entry.getValue().getProduct();
-            DefaultTableModel model = (DefaultTableModel)tblOrders.getModel();
-            model.addRow(new Object[] 
-            {
-                orderedProduct.getProductId(),
-                orderedProduct.toString(),
-                "£"+String.format("%.02f",orderedProduct.getPrice()),
-            });
+            Order order = entry.getValue();
+//            if (order.getStatus() != "Opened")
+//            {
+                model.addRow(new Object[] 
+                {
+                    order.getOrderId(),
+                    order.getOrderDate(),
+                    "£"+String.format("%.02f",order.getOrderTotal()),
+                });
+//            }
         }
         
     }

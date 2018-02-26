@@ -169,9 +169,9 @@ public class StaffViewProducts extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        StaffLogin staffLogin = new StaffLogin(); 
+        StaffHome staffHome = new StaffHome(loggedInStaff); 
         this.dispose();
-        staffLogin.setVisible(true);
+        staffHome.setVisible(true);
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
