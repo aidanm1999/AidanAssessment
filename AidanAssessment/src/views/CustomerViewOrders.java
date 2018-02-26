@@ -54,6 +54,11 @@ public class CustomerViewOrders extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         tblOrders.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -109,6 +114,12 @@ public class CustomerViewOrders extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        CustomerHome customerHome = new CustomerHome(loggedInCustomer);
+        this.dispose();
+        customerHome.setVisible(true);
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * @param args the command line arguments

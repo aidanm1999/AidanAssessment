@@ -21,14 +21,19 @@ public class Customer extends User
         Order lastOrder = new Order();
         
         DBManager db = new DBManager();
+        
+        //loads all orders that belong to a customer
         orders = db.loadCustomerOrders(this);
         
+        //Checks to see if the customer has an order 
         if (orders.isEmpty())
         {
+            //If the customer does not have an order, creates a new order
             addOrder(lastOrder);
         }
         else
         {
+            //If the customer does have an order, finds latest order
             lastOrder = orders.entrySet().iterator().next().getValue();
             for(Map.Entry<Integer, Order> newOrderEntry : orders.entrySet())
             {
@@ -38,8 +43,10 @@ public class Customer extends User
                 }
             }
             
+            //If the order is complete, adds new order
             if (lastOrder.getStatus().equals("Complete"))
             {
+                lastOrder = new Order();
                 addOrder(lastOrder);
             }
         }

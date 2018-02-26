@@ -77,7 +77,7 @@ public class CustomerConfirmation extends javax.swing.JFrame {
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         CustomerHome home = new CustomerHome(loggedInCustomer);
         this.dispose();
-        home.setVisible(false);
+        home.setVisible(true);
     }//GEN-LAST:event_btnBackActionPerformed
 
 

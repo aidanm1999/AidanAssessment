@@ -25,6 +25,9 @@ public class CustomerViewProducts extends javax.swing.JFrame {
         customerProductQuantities = db.loadCustomerProductQuantities(customer);
         loggedInCustomer = customer;
         
+        
+        
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -238,16 +241,32 @@ public class CustomerViewProducts extends javax.swing.JFrame {
             lblMessage.setText("Added To basket!");
             
             
+            int alreadySelected;
+            try
+            {
+                alreadySelected = customerProductQuantities.get(selectedProduct.getProductId());
+            }
+            catch(Exception ex)
+            {
+                alreadySelected = 0;
+            }
+            for (int i = 1; i <= selectedProduct.getStockLevel() - alreadySelected; i++)
+            {
+               comboBoxQuantity.addItem(Integer.toString(i));
+            }
+            
+            //Doesnt work
+             
+            
+            
         } 
-        else
-        {
-            lblMessage.setText("Select Product First");
-        }
+        else { lblMessage.setText("Select Product First"); }
         
     }//GEN-LAST:event_btnAddToBasketActionPerformed
 
     private void btnViewBasketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewBasketActionPerformed
-        CustomerBasket basket = new CustomerBasket(loggedInCustomer);
+        Order customerOrder = loggedInCustomer.findLatestOrder();
+        CustomerBasket basket = new CustomerBasket(loggedInCustomer, customerOrder);
         basket.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnViewBasketActionPerformed

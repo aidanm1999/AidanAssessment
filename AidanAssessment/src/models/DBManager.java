@@ -471,6 +471,46 @@ public class DBManager {
     
 
     
+    public HashMap<Integer, OrderLine> loadCustomerOrderLines(Customer customer, HashMap<Integer, Product> products)
+    {
+
+        HashMap<Integer, OrderLine> customerOrderLines = new HashMap<>();
+        try
+        {
+            Order loadedOrder = customer.findLatestOrder();
+        
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(connString);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM OrderLines WHERE OrderId = '"+loadedOrder.getOrderId()+"'");
+            
+            while(rs.next())
+            {
+                
+                    Product product = products.get(rs.getInt("ProductId"));
+                    
+                    
+                    
+                    OrderLine oLine = new OrderLine(loadedOrder, product,rs.getInt("Quantity"));
+                    customerOrderLines.put(rs.getInt("OrderLineId"), oLine);
+                
+                
+                
+            }
+            
+        }
+        catch(Exception ex)
+        {
+           String message = ex.getMessage();
+        }
+        finally
+        {
+           return customerOrderLines; 
+        }
+    }
+    
+    
+    
     
     
     

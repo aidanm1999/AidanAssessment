@@ -5,6 +5,7 @@
  */
 package views;
 
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import models.Customer;
@@ -20,14 +21,35 @@ import models.Product;
 public class CustomerBasket extends javax.swing.JFrame {
 
     private Customer loggedInCustomer;
-    private int orderId;
+    private Order customerOrder;
+    private HashMap<Integer, OrderLine> customerOrderLines;
     
-    public CustomerBasket(Customer customer) {
+    public CustomerBasket(Customer customer, Order order) {
         initComponents();
         
         loggedInCustomer = customer;
+        customerOrder = order;
+        lblTotalCost.setText("£" + Double.toString(customerOrder.getOrderTotal()));
         
+        DBManager db = new DBManager();
+        HashMap<Integer, Product> products = db.loadProducts();
         
+        customerOrderLines = db.loadCustomerOrderLines(customer, products);
+        
+        customerOrder.setOrderLines(customerOrderLines);
+        
+        for(Map.Entry<Integer, OrderLine> entry : customerOrder.getOrderLines().entrySet())
+        {
+            Product orderedProduct = entry.getValue().getProduct();
+            DefaultTableModel model = (DefaultTableModel)tblCustomerProducts.getModel();
+            model.addRow(new Object[] 
+            {
+                orderedProduct.getProductName(),
+                orderedProduct.getPrice(),
+                entry.getValue().getQuantity(),
+                orderedProduct.getPrice() * entry.getValue().getQuantity(),
+            });
+        }
     }
         
         
@@ -61,7 +83,7 @@ public class CustomerBasket extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Aminal ID", "Animal", "Cost", "Quantity"
+                "Product", "Cost per unit", "Quantity", "Subtotal Cost"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -95,43 +117,46 @@ public class CustomerBasket extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(143, 143, 143)
-                .addComponent(lblMessage)
-                .addContainerGap(278, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(143, 143, 143)
+                        .addComponent(lblMessage))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(25, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(23, 23, 23)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(btnBack)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnRemoveProduct)
-                                    .addComponent(jLabel1))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(btnPurchase))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblTotalCost)
-                                        .addGap(0, 0, Short.MAX_VALUE))))))
-                    .addContainerGap(23, Short.MAX_VALUE)))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(btnRemoveProduct)
+                                .addComponent(jLabel1))
+                            .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(0, 0, Short.MAX_VALUE)
+                                    .addComponent(btnPurchase))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblTotalCost)
+                                    .addGap(0, 0, Short.MAX_VALUE)))))
+                    .addContainerGap(192, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(318, Short.MAX_VALUE)
+                .addGap(67, 67, 67)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
                 .addComponent(lblMessage)
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(34, 34, 34)
                     .addComponent(btnBack)
-                    .addGap(18, 18, 18)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(34, 34, 34)
+                    .addGap(183, 183, 183)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
                         .addComponent(lblTotalCost))
@@ -183,9 +208,9 @@ public class CustomerBasket extends javax.swing.JFrame {
         }
 
         loggedInCustomer.findLatestOrder().setStatus("Not complete");
-        db.completeOrder(orderId);
+        db.completeOrder(customerOrder.getOrderId());
 
-        CustomerConfirmation confirmation = new CustomerConfirmation (loggedInCustomer, orderId);
+        CustomerConfirmation confirmation = new CustomerConfirmation (loggedInCustomer, customerOrder.getOrderId());
         this.dispose();
         confirmation.setVisible(true);
     }//GEN-LAST:event_btnPurchaseActionPerformed
@@ -219,7 +244,8 @@ public class CustomerBasket extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Customer customer = null;
-                new CustomerBasket(customer).setVisible(true);
+                Order order = null;
+                new CustomerBasket(customer, order).setVisible(true);
             }
         });
     }
