@@ -9,16 +9,16 @@ import models.Order;
 //@author Aidan Marshall
 
 
-public class CustomerViewOrders extends javax.swing.JFrame {
+public class CustomerViewOrderLines extends javax.swing.JFrame {
 
     private Customer loggedInCustomer;
     
-    public CustomerViewOrders(Customer customer) 
+    public CustomerViewOrderLines(Customer customer) 
     {
         initComponents();
         loggedInCustomer = customer;
         
-        DefaultTableModel model = (DefaultTableModel)tblOrders.getModel();
+        DefaultTableModel model = (DefaultTableModel)tblOrderLines.getModel();
         
         DBManager db = new DBManager();
         for(Map.Entry<Integer, Order> entry : db.loadCustomerOrders(loggedInCustomer).entrySet())
@@ -50,8 +50,7 @@ public class CustomerViewOrders extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblOrders = new javax.swing.JTable();
-        btnViewOrder = new javax.swing.JButton();
+        tblOrderLines = new javax.swing.JTable();
         lblMessage = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
@@ -65,31 +64,31 @@ public class CustomerViewOrders extends javax.swing.JFrame {
             }
         });
 
-        tblOrders.setModel(new javax.swing.table.DefaultTableModel(
+        tblOrderLines.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Order ID", "Date Ordered", "Total Cost"
+                "Product", "Cost", "Quantity", "Total Cost"
             }
-        ));
-        jScrollPane1.setViewportView(tblOrders);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, false, false
+            };
 
-        btnViewOrder.setText("View Order");
-        btnViewOrder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewOrderActionPerformed(evt);
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
+        jScrollPane1.setViewportView(tblOrderLines);
+        if (tblOrderLines.getColumnModel().getColumnCount() > 0) {
+            tblOrderLines.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnViewOrder)
-                .addGap(151, 151, 151))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -112,9 +111,7 @@ public class CustomerViewOrders extends javax.swing.JFrame {
                 .addComponent(btnBack)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
-                .addComponent(btnViewOrder)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addContainerGap(82, Short.MAX_VALUE)
@@ -126,16 +123,10 @@ public class CustomerViewOrders extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        CustomerHome customerHome = new CustomerHome(loggedInCustomer);
+        CustomerViewOrders customerViewOrders = new CustomerViewOrders(loggedInCustomer);
         this.dispose();
-        customerHome.setVisible(true);
+        customerViewOrders.setVisible(true);
     }//GEN-LAST:event_btnBackActionPerformed
-
-    private void btnViewOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrderActionPerformed
-        CustomerViewOrderLines CustomerViewOrderLines = new CustomerViewOrderLines(loggedInCustomer, orderine);
-        this.dispose();
-        CustomerViewOrderLines.setVisible(true);
-    }//GEN-LAST:event_btnViewOrderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -154,31 +145,31 @@ public class CustomerViewOrders extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CustomerViewOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CustomerViewOrderLines.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CustomerViewOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CustomerViewOrderLines.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CustomerViewOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CustomerViewOrderLines.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CustomerViewOrders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CustomerViewOrderLines.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Customer customer = null;
-                new CustomerViewOrders(customer).setVisible(true);
+                new CustomerViewOrderLines(customer).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnViewOrder;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblMessage;
-    private javax.swing.JTable tblOrders;
+    private javax.swing.JTable tblOrderLines;
     // End of variables declaration//GEN-END:variables
 }
