@@ -12,8 +12,9 @@ import models.Order;
 public class CustomerViewOrderLines extends javax.swing.JFrame {
 
     private Customer loggedInCustomer;
+    private Order selectedOrder;
     
-    public CustomerViewOrderLines(Customer customer) 
+    public CustomerViewOrderLines(Customer customer, Order order) 
     {
         initComponents();
         loggedInCustomer = customer;
@@ -23,15 +24,15 @@ public class CustomerViewOrderLines extends javax.swing.JFrame {
         DBManager db = new DBManager();
         for(Map.Entry<Integer, Order> entry : db.loadCustomerOrders(loggedInCustomer).entrySet())
         {
-            Order order = entry.getValue();
-            String orderStatus = order.getStatus();
+            selectedOrder = entry.getValue();
+            String orderStatus = selectedOrder.getStatus();
             if (orderStatus.equals("Opened"))
             {
                 model.addRow(new Object[] 
                 {
-                    order.getOrderId(),
-                    order.getOrderDate(),
-                    "£"+String.format("%.02f",order.getOrderTotal()),
+                    selectedOrder.getOrderId(),
+                    selectedOrder.getOrderDate(),
+                    "£"+String.format("%.02f",selectedOrder.getOrderTotal()),
                 });
             }
         }
@@ -160,7 +161,8 @@ public class CustomerViewOrderLines extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Customer customer = null;
-                new CustomerViewOrderLines(customer).setVisible(true);
+                Order order = null;
+                new CustomerViewOrderLines(customer, order).setVisible(true);
             }
         });
     }

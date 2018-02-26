@@ -1,5 +1,6 @@
 package views;
 
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import models.Customer;
@@ -12,29 +13,31 @@ import models.Order;
 public class CustomerViewOrders extends javax.swing.JFrame {
 
     private Customer loggedInCustomer;
+    private Order selectedOrder;
+    private HashMap <Integer, Order> customerOrders;
     
     public CustomerViewOrders(Customer customer) 
     {
         initComponents();
         loggedInCustomer = customer;
-        
+        DBManager db = new DBManager();
+        customerOrders = db.loadCustomerOrders(loggedInCustomer);
         DefaultTableModel model = (DefaultTableModel)tblOrders.getModel();
         
-        DBManager db = new DBManager();
-        for(Map.Entry<Integer, Order> entry : db.loadCustomerOrders(loggedInCustomer).entrySet())
+        for(Map.Entry<Integer, Order> entry : customerOrders.entrySet())
         {
-            Order order = entry.getValue();
-            String orderStatus = order.getStatus();
-            if (orderStatus.equals("Opened"))
+            selectedOrder = entry.getValue();
+            if (selectedOrder.getStatus().equals("Opened"))
             {
                 model.addRow(new Object[] 
                 {
-                    order.getOrderId(),
-                    order.getOrderDate(),
-                    "£"+String.format("%.02f",order.getOrderTotal()),
+                    selectedOrder.getOrderId(),
+                    selectedOrder.getOrderDate(),
+                    "£"+String.format("%.02f",selectedOrder.getOrderTotal()),
                 });
             }
         }
+        selectedOrder = new Order();
     }
     
 
@@ -73,6 +76,11 @@ public class CustomerViewOrders extends javax.swing.JFrame {
                 "Order ID", "Date Ordered", "Total Cost"
             }
         ));
+        tblOrders.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblOrdersMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblOrders);
 
         btnViewOrder.setText("View Order");
@@ -132,10 +140,26 @@ public class CustomerViewOrders extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnViewOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrderActionPerformed
-        CustomerViewOrderLines CustomerViewOrderLines = new CustomerViewOrderLines(loggedInCustomer, orderine);
-        this.dispose();
-        CustomerViewOrderLines.setVisible(true);
+        
+        if (selectedOrder.getOrderId() == 0)
+        {
+            lblMessage.setText("Please select an order first");
+        }
+        else
+        {
+            CustomerViewOrderLines CustomerViewOrderLines = new CustomerViewOrderLines(loggedInCustomer, selectedOrder);
+            this.dispose();
+            CustomerViewOrderLines.setVisible(true);
+        }
+
+        
     }//GEN-LAST:event_btnViewOrderActionPerformed
+
+    private void tblOrdersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrdersMouseClicked
+       DefaultTableModel model = (DefaultTableModel)tblOrders.getModel();
+       int selectedOrderId = Integer.parseInt(String.valueOf(model.getValueAt(tblOrders.getSelectedRow(), 0)));
+       selectedOrder = customerOrders.get(selectedOrderId);
+    }//GEN-LAST:event_tblOrdersMouseClicked
 
     /**
      * @param args the command line arguments
