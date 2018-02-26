@@ -236,8 +236,6 @@ public class CustomerViewProducts extends javax.swing.JFrame {
             DBManager db = new DBManager();
             db.addOrderLine(newOrderLine, loggedInCustomer.findLatestOrder().getOrderId());
             
-            db.updateOrderTotal(openOrder.getOrderId(), newOrderLine.getLineTotal());
-            
             lblMessage.setText("Added To basket!");
             
             
