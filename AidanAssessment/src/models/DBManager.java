@@ -480,43 +480,43 @@ public class DBManager {
     
 
     
-    public HashMap<Integer, OrderLine> loadCustomerOrderLines(Customer customer, HashMap<Integer, Product> products)
+    public HashMap<Integer, OrderLine> loadCustomerOrderLines(Customer customer, Order order)
     {
-
         HashMap<Integer, OrderLine> customerOrderLines = new HashMap<>();
         try
         {
-            Order loadedOrder = customer.findLatestOrder();
-        
+            
+            HashMap<Integer, Product> products = loadProducts();
+            
+            
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM OrderLines WHERE OrderId = '"+loadedOrder.getOrderId()+"'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM OrderLines WHERE OrderId = '"+order.getOrderId()+"'");
+            
+            
             
             while(rs.next())
             {
+                //Construct orderLine
+                    //Order
+                    //Product 
+                    //Quantity
+                OrderLine oLine = new OrderLine(order, products.get(rs.getInt("ProductId")),rs.getInt("Quantity"));
                 
-                    Product product = products.get(rs.getInt("ProductId"));
-                    
-                    
-                    
-                    OrderLine oLine = new OrderLine(loadedOrder, product,rs.getInt("Quantity"));
-                    customerOrderLines.put(rs.getInt("OrderLineId"), oLine);
-                
-                
-                
+                //Add orderLine to customerOrderLines
+                customerOrderLines.put(rs.getInt("OrderLineId"), oLine);
             }
-            
         }
-        catch(Exception ex)
-        {
-           String message = ex.getMessage();
-        }
-        finally
-        {
-           return customerOrderLines; 
-        }
+        catch(Exception ex) {String message = ex.getMessage();}
+        finally {return customerOrderLines;}
     }
+    
+    
+    
+    
+    
+    
     
     
     

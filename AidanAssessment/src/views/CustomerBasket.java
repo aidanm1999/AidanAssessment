@@ -35,7 +35,7 @@ public class CustomerBasket extends javax.swing.JFrame {
         DBManager db = new DBManager();
         HashMap<Integer, Product> products = db.loadProducts();
         
-        customerOrderLines = db.loadCustomerOrderLines(customer, products);
+        customerOrderLines = db.loadCustomerOrderLines(loggedInCustomer, customerOrder);
         
         customerOrder.setOrderLines(customerOrderLines);
         

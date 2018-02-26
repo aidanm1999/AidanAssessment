@@ -1,10 +1,12 @@
 package views;
 
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import models.Customer;
 import models.DBManager;
 import models.Order;
+import models.OrderLine;
 
 //@author Aidan Marshall
 
@@ -13,6 +15,9 @@ public class CustomerViewOrderLines extends javax.swing.JFrame {
 
     private Customer loggedInCustomer;
     private Order selectedOrder;
+    private OrderLine selectedOrderLine;
+    private HashMap <Integer, OrderLine> orderLines = new HashMap<>();
+    
     
     public CustomerViewOrderLines(Customer customer, Order order) 
     {
@@ -22,19 +27,16 @@ public class CustomerViewOrderLines extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel)tblOrderLines.getModel();
         
         DBManager db = new DBManager();
-        for(Map.Entry<Integer, Order> entry : db.loadCustomerOrders(loggedInCustomer).entrySet())
+        for(Map.Entry<Integer, OrderLine> entry : db.loadCustomerOrderLines(loggedInCustomer, order).entrySet())
         {
-            selectedOrder = entry.getValue();
-            String orderStatus = selectedOrder.getStatus();
-            if (orderStatus.equals("Opened"))
+            selectedOrderLine = entry.getValue();
+            model.addRow(new Object[] 
             {
-                model.addRow(new Object[] 
-                {
-                    selectedOrder.getOrderId(),
-                    selectedOrder.getOrderDate(),
-                    "£"+String.format("%.02f",selectedOrder.getOrderTotal()),
-                });
-            }
+                selectedOrderLine.getProduct().getProductName(),
+                selectedOrderLine.getProduct().getPrice(),
+                selectedOrderLine.getQuantity(),
+                selectedOrderLine.getLineTotal()
+            });
         }
     }
     
