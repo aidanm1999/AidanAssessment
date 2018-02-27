@@ -36,6 +36,7 @@ public class CustomerViewOrders extends javax.swing.JFrame {
                     selectedOrder.getOrderId(),
                     selectedOrder.getOrderDate(),
                     "£"+String.format("%.02f",selectedOrder.getOrderTotal()),
+                    selectedOrder.getStatus(),
                 });
             }
         }
@@ -75,15 +76,28 @@ public class CustomerViewOrders extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Order ID", "Date Ordered", "Total Cost"
+                "Order ID", "Date Ordered", "Total Cost", "Status"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblOrders.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblOrdersMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblOrders);
+        if (tblOrders.getColumnModel().getColumnCount() > 0) {
+            tblOrders.getColumnModel().getColumn(0).setResizable(false);
+            tblOrders.getColumnModel().getColumn(2).setResizable(false);
+            tblOrders.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         btnViewOrder.setText("View Order");
         btnViewOrder.addActionListener(new java.awt.event.ActionListener() {

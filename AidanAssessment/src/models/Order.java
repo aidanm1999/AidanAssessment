@@ -16,9 +16,7 @@ public class Order
     
     private int orderId;
     private Date orderDate;
-    
-    
-    
+    private Customer customer;
     private double orderTotal;
     private String status;
     private HashMap<Integer, OrderLine> orderLines;
@@ -65,22 +63,27 @@ public class Order
     }
     
     public int getOrderId(){return orderId;}
-    public Date getOrderDate(){return orderDate;}
-    public double getOrderTotal(){return orderTotal;}
-    public String getStatus(){return status;}
-    public HashMap<Integer, OrderLine> getOrderLines(){return orderLines;}
-    
-    public String getOrderDateTime(){
-    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    String orderDateTime = dateFormat.format(orderDate); 
-    return orderDateTime; }
-    
     public void setOrderId(int oId){orderId = oId;}
+    
+    public Date getOrderDate(){return orderDate;}
     public void setOrderDate(Date oDate){orderDate = oDate;}
+    
+    public double getOrderTotal(){return orderTotal;}
     public void setOrderTotal(double oTotal){orderTotal = oTotal;}
+    
+    public String getStatus(){return status;}
     public void setStatus(String oStatus){status = oStatus;}
-    public void setOrderLines(HashMap<Integer, OrderLine> oLines)
-    {orderLines = oLines;}
+    
+    public HashMap<Integer, OrderLine> getOrderLines(){return orderLines;}
+    public void setOrderLines(HashMap<Integer, OrderLine> oLines){orderLines = oLines;}
+
+    public Customer getCustomer(){return customer;}
+    public void setOrderLines(Customer cust){customer = cust;}
+    
+    
+    
+    
+    
     
     
     
@@ -115,5 +118,17 @@ public class Order
         orderLines = new HashMap<>();
     }
     
+    
+    
+    
+    
+    public Order(int oId, Date oDate, double oTotal) //For complete orders ONLY
+    {
+        DBManager db = new DBManager();
+        orderId = oId;
+        orderTotal = oTotal;
+        orderDate = oDate;
+        status = "Complete";
+    }
     
 }

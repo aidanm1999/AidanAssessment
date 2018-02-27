@@ -1,8 +1,10 @@
 package views;
 
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import models.Customer;
+import models.DBManager;
 import models.Order;
 import models.OrderLine;
 import models.Product;
@@ -15,11 +17,32 @@ public class StaffViewOrders extends javax.swing.JFrame {
 
     private Staff loggedInStaff;
     private Order selectedOrder;
+    private HashMap<Integer, Order> orders;
     
     public StaffViewOrders(Staff staff) {
         initComponents();
         loggedInStaff = staff;
 
+        
+        DBManager db = new DBManager();
+        //Loads orders
+        orders = db.loadOrders();
+        DefaultTableModel model = (DefaultTableModel)tblOrders.getModel();
+        
+        for(Map.Entry<Integer, Order> entry : orders.entrySet())
+        {
+            selectedOrder = entry.getValue();
+            if (selectedOrder.getStatus().equals("Complete"))
+            {
+                model.addRow(new Object[] 
+                {
+                    selectedOrder.getOrderId(),
+                    selectedOrder.getOrderDate(),
+                    selectedOrder.getOrderTotal()
+                });
+            }
+        }
+        selectedOrder = new Order();
         
         
     }
@@ -52,10 +75,23 @@ public class StaffViewOrders extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Order ID", "Date Ordered", "Total Cost"
+                "Order ID", "Date Ordered", "Total"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblOrders);
+        if (tblOrders.getColumnModel().getColumnCount() > 0) {
+            tblOrders.getColumnModel().getColumn(0).setResizable(false);
+            tblOrders.getColumnModel().getColumn(1).setResizable(false);
+            tblOrders.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         btnViewOrder.setText("View Order");
         btnViewOrder.addActionListener(new java.awt.event.ActionListener() {
@@ -64,7 +100,7 @@ public class StaffViewOrders extends javax.swing.JFrame {
             }
         });
 
-        btnCompleteOrder.setText("Complete Order");
+        btnCompleteOrder.setText("Order Dispatched");
         btnCompleteOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCompleteOrderActionPerformed(evt);
@@ -75,26 +111,26 @@ public class StaffViewOrders extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(btnBack)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(btnViewOrder)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCompleteOrder)
                 .addGap(21, 21, 21))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(btnBack))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(202, Short.MAX_VALUE)
+                    .addContainerGap(174, Short.MAX_VALUE)
                     .addComponent(lblMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(188, Short.MAX_VALUE)))
+                    .addContainerGap(161, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

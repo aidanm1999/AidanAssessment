@@ -13,14 +13,14 @@ import javax.swing.DefaultListModel;
 import models.DBManager;
 import models.Product;
 
-public class UserViewProducts extends javax.swing.JFrame {
+public class GuestViewProducts extends javax.swing.JFrame {
 
    
     private HashMap<Integer, Product> products; 
     
     
     
-    public UserViewProducts() {
+    public GuestViewProducts() {
         initComponents();
         DBManager db = new DBManager();
         products = db.loadProducts();
@@ -207,21 +207,23 @@ public class UserViewProducts extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UserViewProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GuestViewProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UserViewProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GuestViewProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UserViewProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GuestViewProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UserViewProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GuestViewProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UserViewProducts().setVisible(true);
+                new GuestViewProducts().setVisible(true);
                 
             }
         });

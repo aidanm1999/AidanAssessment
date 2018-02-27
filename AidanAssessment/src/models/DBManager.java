@@ -78,6 +78,90 @@ public class DBManager {
     
     
     
+    
+    
+    public Customer loadCustomerFromOrderId(int orderId)
+    {
+        
+        String username = loadCustomerUsername(orderId);
+        Customer customer = new Customer();
+        
+        
+        
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(connString);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Customers WHERE Username = '"+username+"'");
+            
+            if(!rs.next())
+            {
+                conn.close();
+                return null;
+            }
+            else
+            {
+                while(rs.next())
+                {
+                    //String username2 = rs.getString("Username");
+                    String password = rs.getString("Password");
+                    String firstName = rs.getString("FirstName");
+                    String lastName = rs.getString("LastName");
+                    String addressLine1 = rs.getString("AddressLine1");
+                    String addressLine2 = rs.getString("AddressLine2");
+                    String town = rs.getString("Town");
+                    String postcode = rs.getString("Postcode"); 
+                    
+                    customer = new Customer(username, password, firstName, 
+                        lastName, addressLine1, addressLine2, town, postcode);
+                }
+                
+            }
+            
+        }
+        catch(Exception ex)
+        {
+           String message = ex.getMessage();
+        }
+        finally
+        {
+           return customer; 
+        }
+    }
+    
+    private String loadCustomerUsername(int orderId)
+    {
+        String username = "";
+        
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(connString);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Orders");
+            while(rs.next())
+            {
+                //Problem
+                username = rs.getString("Username");
+            }
+        }
+        catch(Exception ex){
+            String message = ex.getMessage();
+        }
+        
+        return username;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public Customer customerLogIn(String usernameIn, String passwordIn)
     {
         try
@@ -372,6 +456,43 @@ public class DBManager {
         }
     }
     
+    
+    
+    
+    
+    
+    
+    
+    public HashMap<Integer, Order> loadOrders()
+    {
+        HashMap<Integer, Order> orders = new HashMap<>();
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(connString);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Orders");
+            
+            while(rs.next())
+            {
+                
+                String dateString = rs.getString("OrderDate");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+                Date date = formatter.parse(dateString);
+                //Creates an order
+                Order loadedOrder = new Order(rs.getInt("OrderId"),date, rs.getDouble("OrderTotal"));
+                orders.put(loadedOrder.getOrderId(), loadedOrder);
+            }
+        }
+        catch(Exception ex)
+        {
+           String message = ex.getMessage();
+        }
+        finally
+        {
+           return orders; 
+        }
+    }
     
     
     
