@@ -354,7 +354,11 @@ public class DBManager {
             
             while(rs.next())
             {
-                Order loadedOrder = new Order(rs.getInt("OrderId"),rs.getDate("OrderDate"),rs.getDouble("OrderTotal"),rs.getString("Status"));
+                
+                String dateString = rs.getString("OrderDate");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+                Date date = formatter.parse(dateString);
+                Order loadedOrder = new Order(rs.getInt("OrderId"),date,rs.getDouble("OrderTotal"),rs.getString("Status"));
                 customerOrders.put(loadedOrder.getOrderId(), loadedOrder);
             }
         }

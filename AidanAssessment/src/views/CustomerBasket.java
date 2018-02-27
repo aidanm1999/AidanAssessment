@@ -189,9 +189,9 @@ public class CustomerBasket extends javax.swing.JFrame {
         else
         {
             DefaultTableModel model = (DefaultTableModel)tblCustomerProducts.getModel();
-            int animalId = Integer.parseInt(String.valueOf(model.getValueAt(tblCustomerProducts.getSelectedRow(), 0)));
+            int productId = Integer.parseInt(String.valueOf(model.getValueAt(tblCustomerProducts.getSelectedRow(), 0)));
 
-            loggedInCustomer.findLatestOrder().removeOrderLine(animalId);
+            loggedInCustomer.findLatestOrder().removeOrderLine(productId);
 
             model.removeRow(tblCustomerProducts.getSelectedRow());
 

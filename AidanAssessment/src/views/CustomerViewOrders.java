@@ -29,7 +29,7 @@ public class CustomerViewOrders extends javax.swing.JFrame {
         for(Map.Entry<Integer, Order> entry : customerOrders.entrySet())
         {
             selectedOrder = entry.getValue();
-            if (selectedOrder.getStatus().equals("Complete"))
+            if (selectedOrder.getStatus().equals("Complete")||selectedOrder.getStatus().equals("Dispatched"))
             {
                 model.addRow(new Object[] 
                 {

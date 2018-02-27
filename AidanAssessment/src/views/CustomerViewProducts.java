@@ -241,22 +241,12 @@ public class CustomerViewProducts extends javax.swing.JFrame {
             
             int alreadySelected;
             try
-            {
-                alreadySelected = customerProductQuantities.get(selectedProduct.getProductId());
-            }
+            {alreadySelected = customerProductQuantities.get(selectedProduct.getProductId());}
             catch(Exception ex)
-            {
-                alreadySelected = 0;
-            }
+            {alreadySelected = 0;}
+            
             for (int i = 1; i <= selectedProduct.getStockLevel() - alreadySelected; i++)
-            {
-               comboBoxQuantity.addItem(Integer.toString(i));
-            }
-            
-            //Doesnt work
-             
-            
-            
+            {comboBoxQuantity.addItem(Integer.toString(i));}
         } 
         else { lblMessage.setText("Select Product First"); }
         

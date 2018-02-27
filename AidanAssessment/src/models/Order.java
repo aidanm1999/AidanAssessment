@@ -1,5 +1,7 @@
 package models;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,6 +16,9 @@ public class Order
     
     private int orderId;
     private Date orderDate;
+    
+    
+    
     private double orderTotal;
     private String status;
     private HashMap<Integer, OrderLine> orderLines;
@@ -64,6 +69,11 @@ public class Order
     public double getOrderTotal(){return orderTotal;}
     public String getStatus(){return status;}
     public HashMap<Integer, OrderLine> getOrderLines(){return orderLines;}
+    
+    public String getOrderDateTime(){
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    String orderDateTime = dateFormat.format(orderDate); 
+    return orderDateTime; }
     
     public void setOrderId(int oId){orderId = oId;}
     public void setOrderDate(Date oDate){orderDate = oDate;}
