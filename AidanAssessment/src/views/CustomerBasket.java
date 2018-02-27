@@ -23,6 +23,7 @@ public class CustomerBasket extends javax.swing.JFrame {
     private Customer loggedInCustomer;
     private Order customerOrder;
     private HashMap<Integer, OrderLine> customerOrderLines;
+    private HashMap<Integer, Product> products;
     
     public CustomerBasket(Customer customer, Order order) {
         initComponents();
@@ -33,7 +34,7 @@ public class CustomerBasket extends javax.swing.JFrame {
         
         
         DBManager db = new DBManager();
-        HashMap<Integer, Product> products = db.loadProducts();
+        products = db.loadProducts();
         
         customerOrderLines = db.loadCustomerOrderLines(loggedInCustomer, customerOrder);
         
@@ -45,6 +46,7 @@ public class CustomerBasket extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel)tblCustomerProducts.getModel();
             model.addRow(new Object[] 
             {
+                orderedProduct.getProductId(),
                 orderedProduct.getProductName(),
                 orderedProduct.getPrice(),
                 entry.getValue().getQuantity(),
@@ -87,11 +89,11 @@ public class CustomerBasket extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Product", "Cost per unit", "Quantity", "Subtotal Cost"
+                "Product Id", "Product", "Cost per unit", "Quantity", "Subtotal Cost"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -99,6 +101,13 @@ public class CustomerBasket extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tblCustomerProducts);
+        if (tblCustomerProducts.getColumnModel().getColumnCount() > 0) {
+            tblCustomerProducts.getColumnModel().getColumn(0).setResizable(false);
+            tblCustomerProducts.getColumnModel().getColumn(1).setResizable(false);
+            tblCustomerProducts.getColumnModel().getColumn(2).setResizable(false);
+            tblCustomerProducts.getColumnModel().getColumn(3).setResizable(false);
+            tblCustomerProducts.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         btnRemoveProduct.setText("Remove Product");
         btnRemoveProduct.addActionListener(new java.awt.event.ActionListener() {
@@ -121,14 +130,13 @@ public class CustomerBasket extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(143, 143, 143)
-                        .addComponent(lblMessage))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGap(143, 143, 143)
+                .addComponent(lblMessage)
+                .addContainerGap(278, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(23, 23, 23)
@@ -189,9 +197,10 @@ public class CustomerBasket extends javax.swing.JFrame {
         else
         {
             DefaultTableModel model = (DefaultTableModel)tblCustomerProducts.getModel();
-            int productId = Integer.parseInt(String.valueOf(model.getValueAt(tblCustomerProducts.getSelectedRow(), 0)));
-
-            loggedInCustomer.findLatestOrder().removeOrderLine(productId);
+            int productId = Integer.valueOf(String.valueOf(model.getValueAt(tblCustomerProducts.getSelectedRow(), 0)));
+            
+            DBManager db = new DBManager();
+            db.deleteOrderLine(customerOrder.getOrderId(), productId);
 
             model.removeRow(tblCustomerProducts.getSelectedRow());
 

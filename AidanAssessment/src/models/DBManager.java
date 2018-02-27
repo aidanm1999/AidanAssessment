@@ -411,8 +411,11 @@ public class DBManager {
             Connection conn = DriverManager.getConnection(connString);
             Statement stmt = conn.createStatement();
             
-            stmt.executeUpdate("DELETE FROM OrderLines WHERE OrderId = '" + 
-                    orderId + " AND Username = '"+ productId +"'");
+            stmt.executeUpdate("DELETE FROM OrderLines WHERE "
+                    + "OrderId = '"+orderId+"' AND "
+                    + "ProductId='"+productId+"'");
+            
+            
             conn.close();
         }
         catch(Exception ex)
