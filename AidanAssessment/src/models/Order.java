@@ -50,6 +50,7 @@ public class Order
     
     public int generateUniqueOrderLineId()
     {
+        
         int orderLineId = 0;
         for(Map.Entry<Integer, OrderLine> orderLineEntry : orderLines.entrySet())
         {

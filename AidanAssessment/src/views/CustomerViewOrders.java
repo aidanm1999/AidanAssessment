@@ -158,8 +158,8 @@ public class CustomerViewOrders extends javax.swing.JFrame {
         }
         else
         {
-            DBManager db = new DBManager();
-            customerOrderLines = db.loadCustomerOrderLines(loggedInCustomer, selectedOrder);
+//            DBManager db = new DBManager();
+//            customerOrderLines = db.loadOrderLines(selectedOrder);
 
             CustomerViewOrderLines CustomerViewOrderLines = new CustomerViewOrderLines(loggedInCustomer, selectedOrder);
             this.dispose();

@@ -3,11 +3,9 @@ package views;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
-import models.Customer;
 import models.DBManager;
 import models.Order;
 import models.OrderLine;
-import models.Product;
 import models.Staff;
 
 //@author Aidan Marshall
@@ -18,6 +16,7 @@ public class StaffViewOrders extends javax.swing.JFrame {
     private Staff loggedInStaff;
     private Order selectedOrder;
     private HashMap<Integer, Order> orders;
+    private HashMap<Integer, OrderLine> orderLines;
     
     public StaffViewOrders(Staff staff) {
         initComponents();
@@ -86,6 +85,11 @@ public class StaffViewOrders extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblOrders.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblOrdersMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblOrders);
         if (tblOrders.getColumnModel().getColumnCount() > 0) {
             tblOrders.getColumnModel().getColumn(0).setResizable(false);
@@ -111,26 +115,25 @@ public class StaffViewOrders extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(btnViewOrder)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnCompleteOrder)
-                .addGap(21, 21, 21))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(btnBack))
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(10, 10, 10)
+                            .addComponent(btnBack))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addComponent(btnViewOrder)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnCompleteOrder)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(174, Short.MAX_VALUE)
-                    .addComponent(lblMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(161, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,16 +142,13 @@ public class StaffViewOrders extends javax.swing.JFrame {
                 .addComponent(btnBack)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnViewOrder)
                     .addComponent(btnCompleteOrder))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(82, Short.MAX_VALUE)
-                    .addComponent(lblMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(196, Short.MAX_VALUE)))
         );
 
         pack();
@@ -161,8 +161,12 @@ public class StaffViewOrders extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnViewOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrderActionPerformed
-        if(selectedOrder!= null)
+        if(selectedOrder.getOrderId()!= 0)
         {
+                    
+//            DBManager db = new DBManager();
+//            orderLines = db.loadOrderLines(selectedOrder);
+                    
             StaffViewOrderLines staffViewOrderLines = new StaffViewOrderLines(loggedInStaff, selectedOrder);
             this.dispose();
             staffViewOrderLines.setVisible(true);
@@ -175,8 +179,24 @@ public class StaffViewOrders extends javax.swing.JFrame {
     }//GEN-LAST:event_btnViewOrderActionPerformed
 
     private void btnCompleteOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompleteOrderActionPerformed
-        // TODO add your handling code here:
+        if(selectedOrder.getOrderId() != 0)
+        {
+            DBManager db = new DBManager();
+            db.dispatchOrder(selectedOrder.getOrderId());
+            lblMessage.setText("Dispatched!");
+            
+        }
+        else
+        {
+            lblMessage.setText("Select order first");
+        }
     }//GEN-LAST:event_btnCompleteOrderActionPerformed
+
+    private void tblOrdersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrdersMouseClicked
+       DefaultTableModel model = (DefaultTableModel)tblOrders.getModel();
+       int selectedOrderId = Integer.parseInt(String.valueOf(model.getValueAt(tblOrders.getSelectedRow(), 0)));
+       selectedOrder = orders.get(selectedOrderId);
+    }//GEN-LAST:event_tblOrdersMouseClicked
 
     /**
      * @param args the command line arguments

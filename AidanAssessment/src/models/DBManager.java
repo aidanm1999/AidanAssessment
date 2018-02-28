@@ -608,9 +608,9 @@ public class DBManager {
     
 
     
-    public HashMap<Integer, OrderLine> loadCustomerOrderLines(Customer customer, Order order)
+    public HashMap<Integer, OrderLine> loadOrderLines(Order order)
     {
-        HashMap<Integer, OrderLine> customerOrderLines = new HashMap<>();
+        HashMap<Integer, OrderLine> orderLines = new HashMap<>();
         try
         {
             
@@ -630,19 +630,22 @@ public class DBManager {
                     //Order
                     //Product 
                     //Quantity
-                OrderLine oLine = new OrderLine(order, products.get(rs.getInt("ProductId")),rs.getInt("Quantity"));
+                int olid = rs.getInt("OrderLineId");
+                
+                OrderLine newOrderLine = new OrderLine(order, products.get(rs.getInt("ProductId")), rs.getInt("Quantity"));
+                //ERROR IN CREATING oLine
                 
                 //Add orderLine to customerOrderLines
-                customerOrderLines.put(rs.getInt("OrderLineId"), oLine);
+                orderLines.put(rs.getInt("OrderLineId"), newOrderLine);
             }
         }
         catch(Exception ex) {String message = ex.getMessage();}
-        finally {return customerOrderLines;}
+        finally {return orderLines;}
     }
     
     
     
-    
+ 
     
     
     

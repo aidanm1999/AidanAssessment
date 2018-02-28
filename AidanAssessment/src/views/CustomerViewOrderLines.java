@@ -27,7 +27,7 @@ public class CustomerViewOrderLines extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel)tblOrderLines.getModel();
         
         DBManager db = new DBManager();
-        for(Map.Entry<Integer, OrderLine> entry : db.loadCustomerOrderLines(loggedInCustomer, order).entrySet())
+        for(Map.Entry<Integer, OrderLine> entry : db.loadOrderLines(order).entrySet())
         {
             selectedOrderLine = entry.getValue();
             model.addRow(new Object[] 
