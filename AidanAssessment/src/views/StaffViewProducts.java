@@ -152,10 +152,10 @@ public class StaffViewProducts extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(spCategories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spProducts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(spProducts, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddProduct)
                     .addComponent(btnEditProduct)
@@ -223,12 +223,19 @@ public class StaffViewProducts extends javax.swing.JFrame {
         {
             DBManager db = new DBManager();
             db.deleteProduct(selectedProduct);
+            DefaultListModel model = new DefaultListModel();
+            products = db.loadProducts();
+            model.clear();
+            for(Map.Entry<Integer, Product> productEntry : products.entrySet())
+            {
+                Product actualProduct = productEntry.getValue();
+
+                if(actualProduct.getClass().getName().equals("models." + lstCategory.getSelectedValue()))
+                { model.addElement(actualProduct); }
+            }
             lblMessage.setText("Product deleted.");
-        }
-        else
-        {
-            lblMessage.setText("Please select a product");
-        }
+            lstProducts.setModel(model);
+        } else { lblMessage.setText("Please select a product"); }
     }//GEN-LAST:event_btnDeleteProductActionPerformed
 
     /**

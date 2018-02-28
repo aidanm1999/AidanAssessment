@@ -874,6 +874,35 @@ public class DBManager {
         
         
         
+    
+    
+    
+    
+    
+    
+    
+        public void updateStockLevel(OrderLine orderLine)
+    {
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(connString);
+            Statement stmt = conn.createStatement();
+            
+            int stockLevel = orderLine.getProduct().getStockLevel() - orderLine.getQuantity();
+            
+            stmt.executeUpdate("UPDATE Products SET StockLevel = '"+stockLevel+"' WHERE ProductId= '" + orderLine.getProduct().getProductId()+ "'");
+            conn.close(); 
+        }
+        catch(Exception ex)
+        {
+            String message = ex.getMessage();
+        }
+    }
+    
+    
+    
+    
         
         
         

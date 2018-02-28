@@ -211,16 +211,15 @@ public class CustomerBasket extends javax.swing.JFrame {
 
     private void btnPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPurchaseActionPerformed
         DBManager db = new DBManager();
-        for(Map.Entry<Integer, OrderLine> olEntry : loggedInCustomer.findLatestOrder().getOrderLines().entrySet())
+        for(Map.Entry<Integer, OrderLine> olEntry : customerOrder.getOrderLines().entrySet())
         {
             OrderLine actualOrderLine = olEntry.getValue();
-            Product orderedProduct = actualOrderLine.getProduct();
-
-//            orderedProduct.setIsAvailable(false);
-//            db.updateProductAvailablility(orderedProduct);
+            
+            //Update stock
+            db.updateStockLevel(actualOrderLine);
         }
 
-        loggedInCustomer.findLatestOrder().setStatus("Not complete");
+        loggedInCustomer.findLatestOrder().setStatus("Complete");
         db.completeOrder(customerOrder.getOrderId());
 
         CustomerConfirmation confirmation = new CustomerConfirmation (loggedInCustomer, customerOrder.getOrderId());
