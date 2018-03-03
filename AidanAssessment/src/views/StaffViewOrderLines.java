@@ -1,10 +1,10 @@
 package views;
 
+import DBManagers.OrderLineDBManager;
 import models.Staff;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
-import models.DBManager;
 import models.Order;
 import models.OrderLine;
 
@@ -22,13 +22,14 @@ public class StaffViewOrderLines extends javax.swing.JFrame {
     {
         initComponents();
         loggedInStaff = staff;
+        OrderLineDBManager oldb= new OrderLineDBManager(); 
+        orderLines = oldb.selectCustomerOrderLines(order.getOrderId());
         order.setOrderLines(orderLines);
 
         
         DefaultTableModel model = (DefaultTableModel)tblOrderLines.getModel();
         
-        DBManager db = new DBManager();
-        for(Map.Entry<Integer, OrderLine> entry : db.loadOrderLines(order).entrySet())
+        for(Map.Entry<Integer, OrderLine> entry : order.getOrderLines().entrySet())
         {
             selectedOrderLine = entry.getValue();
             model.addRow(new Object[] 

@@ -1,12 +1,9 @@
 package views;
 
-import java.util.HashMap;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import models.Customer;
-import models.DBManager;
 import models.Order;
-import models.OrderLine;
 
 //@author Aidan Marshall
 
@@ -15,32 +12,27 @@ public class CustomerViewOrders extends javax.swing.JFrame {
 
     private Customer loggedInCustomer;
     private Order selectedOrder;
-    private HashMap<Integer, Order> customerOrders;
-    private HashMap<Integer, OrderLine> customerOrderLines;
     
     public CustomerViewOrders(Customer customer) 
     {
         initComponents();
         loggedInCustomer = customer;
-        DBManager db = new DBManager();
-        customerOrders = db.loadCustomerOrders(loggedInCustomer);
+        
         DefaultTableModel model = (DefaultTableModel)tblOrders.getModel();
         
-        for(Map.Entry<Integer, Order> entry : customerOrders.entrySet())
+        for(Map.Entry<Integer, Order> entry : loggedInCustomer.getOrders().entrySet())
         {
-            selectedOrder = entry.getValue();
-            if (selectedOrder.getStatus().equals("Complete")||selectedOrder.getStatus().equals("Dispatched"))
+            if (entry.getValue().getStatus().equals("Complete")||entry.getValue().getStatus().equals("Dispatched"))
             {
                 model.addRow(new Object[] 
                 {
-                    selectedOrder.getOrderId(),
-                    selectedOrder.getOrderDate(),
-                    "£"+String.format("%.02f",selectedOrder.getOrderTotal()),
-                    selectedOrder.getStatus(),
+                    entry.getValue().getOrderId(),
+                    entry.getValue().getOrderDate(),
+                    "£"+String.format("%.02f",entry.getValue().getOrderTotal()),
+                    entry.getValue().getStatus(),
                 });
             }
         }
-        selectedOrder = new Order();
     }
     
 
@@ -151,19 +143,15 @@ public class CustomerViewOrders extends javax.swing.JFrame {
 
     private void btnViewOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrderActionPerformed
         
-        //lblMessage.setText("Hello");
         if (selectedOrder.getOrderId() == 0)
         {
             lblMessage.setText("Please select an order first");
         }
         else
         {
-//            DBManager db = new DBManager();
-//            customerOrderLines = db.loadOrderLines(selectedOrder);
-
-            CustomerViewOrderLines CustomerViewOrderLines = new CustomerViewOrderLines(loggedInCustomer, selectedOrder);
+            CustomerViewOrderLines customerViewOrderLines = new CustomerViewOrderLines(loggedInCustomer, selectedOrder);
             this.dispose();
-            CustomerViewOrderLines.setVisible(true);
+            customerViewOrderLines.setVisible(true);
         }
 
         
@@ -171,8 +159,7 @@ public class CustomerViewOrders extends javax.swing.JFrame {
 
     private void tblOrdersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrdersMouseClicked
        DefaultTableModel model = (DefaultTableModel)tblOrders.getModel();
-       int selectedOrderId = Integer.parseInt(String.valueOf(model.getValueAt(tblOrders.getSelectedRow(), 0)));
-       selectedOrder = customerOrders.get(selectedOrderId);
+       selectedOrder = loggedInCustomer.getOrders().get(Integer.parseInt(String.valueOf(model.getValueAt(tblOrders.getSelectedRow(), 0))));
     }//GEN-LAST:event_tblOrdersMouseClicked
 
     /**

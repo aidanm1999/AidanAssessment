@@ -5,9 +5,8 @@
  */
 package views;
 
-import java.util.HashMap;
+import DBManagers.ProductDBManager;
 import models.Clothing;
-import models.DBManager;
 import models.Footwear;
 import models.Product;
 import models.Staff;
@@ -210,15 +209,15 @@ public class StaffEditProduct extends javax.swing.JFrame {
         selectedProduct.setProductName(txtProductName.getText());
         selectedProduct.setPrice(Double.parseDouble(txtPrice.getText()));
         selectedProduct.setStockLevel(Integer.parseInt(txtStockLevel.getText()));
-        DBManager db = new DBManager();
+        ProductDBManager pdb = new ProductDBManager();
         
         if (selectedProduct.getClass().getName().equals("models.Clothing"))
         {
-            db.updateClothing(selectedProduct, txtAdditional.getText());
+            pdb.updateClothing(selectedProduct, txtAdditional.getText());
         }
         else
         {
-            db.updateFootwear(selectedProduct, Integer.parseInt(txtAdditional.getText()));
+            pdb.updateFootwear(selectedProduct, Integer.parseInt(txtAdditional.getText()));
         }
         
         lblMessage.setText("Updated!");

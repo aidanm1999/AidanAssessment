@@ -7,11 +7,11 @@ package views;
 
 //Author - Aidan Marshall
 
+import DBManagers.ProductDBManager;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import models.Staff;
-import models.DBManager;
 import models.Product;
 
 public class StaffViewProducts extends javax.swing.JFrame {
@@ -24,8 +24,9 @@ public class StaffViewProducts extends javax.swing.JFrame {
     
     public StaffViewProducts(Staff staff) {
         initComponents();
-        DBManager db = new DBManager();
-        products = db.loadProducts();
+        ProductDBManager pdb = new ProductDBManager();
+        //Loads orders
+        products = pdb.selectAllProducts();
         loggedInStaff = staff;
     }
 
@@ -221,10 +222,10 @@ public class StaffViewProducts extends javax.swing.JFrame {
     private void btnDeleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteProductActionPerformed
         if (selectedProduct != null)
         {
-            DBManager db = new DBManager();
-            db.deleteProduct(selectedProduct);
+            ProductDBManager pdb = new ProductDBManager();
+            pdb.deleteProduct(selectedProduct.getProductId());
             DefaultListModel model = new DefaultListModel();
-            products = db.loadProducts();
+            products = pdb.selectAllProducts();
             model.clear();
             for(Map.Entry<Integer, Product> productEntry : products.entrySet())
             {

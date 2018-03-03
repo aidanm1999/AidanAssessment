@@ -1,22 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package views;
 
+import DBManagers.CustomerDBManager;
 import models.Customer;
-import models.DBManager;
 
 /**
  *
- * @author jahood
+ * @author Aidan Marshall
  */
 public class CustomerRegister extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ZooKeeperHome
-     */
+
     public CustomerRegister() {
         initComponents();
     }
@@ -204,9 +197,9 @@ public class CustomerRegister extends javax.swing.JFrame {
 
                 Customer newCustomer = new Customer(username, password, firstName, lastName,  addressLine1,  addressLine2,  town,  postcode);
 
-                DBManager db = new DBManager();
+                CustomerDBManager cdb = new CustomerDBManager();
 
-                if(db.registerCustomer(newCustomer))
+                if(cdb.insertCustomer(newCustomer))
                 {
                         lblMessage.setText("Registration Successful");
                 }

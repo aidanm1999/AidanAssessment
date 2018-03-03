@@ -6,11 +6,12 @@
 package views;
 
 import models.Customer;
-import models.DBManager;
+import DBManagers.CustomerDBManager;
+
 
 /**
  *
- * @author jahood
+ * @author Aidan Marshall
  */
 public class CustomerLogin extends javax.swing.JFrame {
 
@@ -129,24 +130,24 @@ public class CustomerLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-        
-        DBManager db = new DBManager();
-        Customer customer = db.customerLogIn(username, password);
+
+        CustomerDBManager cdb = new CustomerDBManager();
+        Customer customer = cdb.selectCustomer(txtUsername.getText());
         
         
         if(customer == null)
         {
-            lblMessage.setText("Invalid Username And/Or Password");
+            lblMessage.setText("Invalid Username");
         }
-        else
+        else if (customer.getPassword().equals(txtPassword.getText()))
         {
-            
             CustomerHome customerHome = new CustomerHome(customer);
             this.dispose();
             customerHome.setVisible(true);
+        }
+        else
+        {
+            lblMessage.setText("Invalid Password");
         }
         
         

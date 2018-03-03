@@ -1,7 +1,7 @@
 package views;
 
+import DBManagers.CustomerDBManager;
 import models.Customer;
-import models.DBManager;
 
 public class CustomerUnregisterVerification extends javax.swing.JFrame {
 
@@ -83,8 +83,8 @@ public class CustomerUnregisterVerification extends javax.swing.JFrame {
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         //DELETE CUSTOMER
-        DBManager db = new DBManager();
-        db.deleteCustomer(loggedInCustomer);
+        CustomerDBManager cdb = new CustomerDBManager();
+        cdb.deleteCustomer(loggedInCustomer);
         
         loggedInCustomer = null;
   

@@ -1,9 +1,9 @@
 package views;
 
+import DBManagers.OrderDBManager;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
-import models.DBManager;
 import models.Order;
 import models.OrderLine;
 import models.Staff;
@@ -16,16 +16,15 @@ public class StaffViewOrders extends javax.swing.JFrame {
     private Staff loggedInStaff;
     private Order selectedOrder;
     private HashMap<Integer, Order> orders;
-    private HashMap<Integer, OrderLine> orderLines;
     
     public StaffViewOrders(Staff staff) {
         initComponents();
         loggedInStaff = staff;
 
         
-        DBManager db = new DBManager();
+        OrderDBManager odb = new OrderDBManager();
         //Loads orders
-        orders = db.loadOrders();
+        orders = odb.selectAllOrders();
         DefaultTableModel model = (DefaultTableModel)tblOrders.getModel();
         
         for(Map.Entry<Integer, Order> entry : orders.entrySet())
@@ -164,9 +163,6 @@ public class StaffViewOrders extends javax.swing.JFrame {
         if(selectedOrder.getOrderId()!= 0)
         {
                     
-//            DBManager db = new DBManager();
-//            orderLines = db.loadOrderLines(selectedOrder);
-                    
             StaffViewOrderLines staffViewOrderLines = new StaffViewOrderLines(loggedInStaff, selectedOrder);
             this.dispose();
             staffViewOrderLines.setVisible(true);
@@ -181,8 +177,9 @@ public class StaffViewOrders extends javax.swing.JFrame {
     private void btnCompleteOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompleteOrderActionPerformed
         if(selectedOrder.getOrderId() != 0)
         {
-            DBManager db = new DBManager();
-            db.dispatchOrder(selectedOrder.getOrderId());
+            OrderDBManager odb = new OrderDBManager();
+            selectedOrder.setStatus("Dispatched");
+            odb.updateOrder(selectedOrder);
             lblMessage.setText("Dispatched!");
             
         }

@@ -4,38 +4,32 @@ package models;
 
 public class Footwear extends Product
 {
-    
+    // <editor-fold defaultstate="collapsed" desc="Attributes">
     private int size;
-
+    //</editor-fold>
     
     
-    public int getSize() 
-    {
-        return size;
-    }
-
+    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
+    public int getSize() { return size; }
+    public void setSize(int sizeIn) { size = sizeIn; }
+    //</editor-fold>
     
     
-    public void setSize(int sizeIn) 
-    {
-        size = sizeIn;
-    }
-    
-    
+    // <editor-fold defaultstate="collapsed" desc="Empty Constructor">
     public Footwear()
     {
         super();
         size = 0;
-
     }
+    //</editor-fold>
+
     
-    
-    public Footwear(int product_ID_in, String product_name_in, double price_in, int stock_level_in, int sizeIn)
+    // <editor-fold defaultstate="collapsed" desc="Overloaded Constructor">
+    public Footwear(int productIdIn, String productNameIn, double priceIn, int stockLevelIn, int sizeIn)
     {
-
-        super(product_ID_in, product_name_in, price_in, stock_level_in);
+        super(productIdIn, productNameIn, priceIn, stockLevelIn);
         size = sizeIn;
-
     }
-    
+    //</editor-fold>
+
 }

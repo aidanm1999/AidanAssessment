@@ -7,10 +7,10 @@ package views;
 
 //Author - Aidan Marshall
 
+import DBManagers.ProductDBManager;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
-import models.DBManager;
 import models.Product;
 
 public class GuestViewProducts extends javax.swing.JFrame {
@@ -22,8 +22,8 @@ public class GuestViewProducts extends javax.swing.JFrame {
     
     public GuestViewProducts() {
         initComponents();
-        DBManager db = new DBManager();
-        products = db.loadProducts();
+        ProductDBManager pdb = new ProductDBManager();
+        products = pdb.selectAllProducts();
         
     }
 

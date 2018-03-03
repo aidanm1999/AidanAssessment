@@ -1,10 +1,12 @@
 package views;
 
+import DBManagers.OrderDBManager;
+import DBManagers.OrderLineDBManager;
+import DBManagers.ProductDBManager;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import models.Customer;
-import models.DBManager;
 import models.Order;
 import models.OrderLine;
 import models.Product;
@@ -14,19 +16,39 @@ public class CustomerViewProducts extends javax.swing.JFrame {
 
     private Customer loggedInCustomer;
     private HashMap<Integer, Product> products; 
-    private HashMap<Integer, Integer> customerProductQuantities; 
     private Product selectedProduct;
     
     
     public CustomerViewProducts(Customer customer) {
         initComponents();
-        DBManager db = new DBManager();
-        products = db.loadProducts();
-        customerProductQuantities = db.loadCustomerProductQuantities(customer);
+        ProductDBManager pdb = new ProductDBManager();
+        products = pdb.selectAllProducts();
         loggedInCustomer = customer;
+
+    }
+    
+    private void updateQuantity(Product product)
+    {
+        //Clear combo box
+        comboBoxQuantity.removeAllItems();
         
         
+        //Get already selected quantities
+        int alreadySelected = 0;
+        for(Map.Entry<Integer, OrderLine> orderLineEntry : loggedInCustomer.findLatestOrder(loggedInCustomer).getOrderLines().entrySet())
+        {
+            if(orderLineEntry.getValue().getProduct().getProductId() == product.getProductId())
+            {
+                alreadySelected += orderLineEntry.getValue().getQuantity();
+            }
+        }
         
+        //Subtract already selected products from total product quantity and display in for loop
+        int i;
+        for (i = 1; i <= (selectedProduct.getStockLevel() - alreadySelected); i++)
+        {
+            comboBoxQuantity.addItem(Integer.toString(i));
+        }  
         
     }
 
@@ -184,77 +206,97 @@ public class CustomerViewProducts extends javax.swing.JFrame {
 
         for(Map.Entry<Integer, Product> productEntry : products.entrySet())
         {
-            Product actualProduct = productEntry.getValue();
-
-            if(actualProduct.getClass().getName().equals("models." + lstCategory.getSelectedValue()))
+            if(productEntry.getValue().getClass().getName().equals("models." + lstCategory.getSelectedValue()))
             {
-                model.addElement(actualProduct);
+                model.addElement(productEntry.getValue());
             }
         }
         
-        
         lstProducts.setModel(model);
-        lblMessage.setText("");
     }//GEN-LAST:event_lstCategoryValueChanged
 
     private void lstProductsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstProductsValueChanged
         Object productObject = lstProducts.getSelectedValue();
         selectedProduct = (Product)productObject;
-        lblMessage.setText("");
         
         lblPrice.setText("£" + Double.toString(selectedProduct.getPrice()));
         
-        comboBoxQuantity.removeAllItems();
+        updateQuantity(selectedProduct);
         
-        
-        int alreadySelected;
-        try
-        {
-            alreadySelected = customerProductQuantities.get(selectedProduct.getProductId());
-        }
-        catch(Exception ex)
-        {
-            alreadySelected = 0;
-        }
-        for (int i = 1; i <= selectedProduct.getStockLevel() - alreadySelected; i++)
-        {
-           comboBoxQuantity.addItem(Integer.toString(i));
-        }
+
     }//GEN-LAST:event_lstProductsValueChanged
 
     private void btnAddToBasketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddToBasketActionPerformed
+        //Checks if customer has selected a product 
         if (selectedProduct != null)
         {
+            //Checks if customer has ordered product before
+            boolean custHasOrdered = false;
+            for(Map.Entry<Integer, OrderLine> orderLineEntry : loggedInCustomer.findLatestOrder(loggedInCustomer).getOrderLines().entrySet())
+            {
+                if(orderLineEntry.getValue().getProduct().getProductId() == selectedProduct.getProductId())
+                {
+                   /*   If the customer has ordered the product 
+                        adds the quantity and lineTotal to the orderLine
+                        updates the quantity in the database
+                    */
+                    
+                    //Gets old lineTotal
+                    double oldLineTotal = orderLineEntry.getValue().getLineTotal();
+                    
+                   //Sets the new quantity + the old quantity
+                    orderLineEntry.getValue().setQuantity(comboBoxQuantity.getSelectedIndex()+1+orderLineEntry.getValue().getQuantity());
+                    
+                    //Sets the new line total
+                    orderLineEntry.getValue().setLineTotal(orderLineEntry.getValue().getQuantity()*orderLineEntry.getValue().getProduct().getPrice());
+                    
+                    //Takes away the old line total and adds the new line total to the OrderTotal
+                    loggedInCustomer.findLatestOrder(loggedInCustomer).setOrderTotal(loggedInCustomer.findLatestOrder(loggedInCustomer).getOrderTotal() - oldLineTotal + orderLineEntry.getValue().getLineTotal());
+                    
+                    //Updates changes to the database
+                    OrderDBManager odb = new OrderDBManager();
+                    odb.updateOrder(loggedInCustomer.findLatestOrder(loggedInCustomer));
+                    OrderLineDBManager oldb = new OrderLineDBManager();
+                    oldb.updateOrderLine(orderLineEntry.getValue());
+                    custHasOrdered = true;
+                }
+            }
             
-            int quantity = comboBoxQuantity.getSelectedIndex()+1;
-            
-            Order openOrder = loggedInCustomer.findLatestOrder();
-            
-            OrderLine newOrderLine = new OrderLine(openOrder, selectedProduct, quantity);
-            newOrderLine.setOrderLineId(openOrder.generateUniqueOrderLineId());
-            
-            DBManager db = new DBManager();
-            db.addOrderLine(newOrderLine, loggedInCustomer.findLatestOrder().getOrderId());
-            
+            if(custHasOrdered != true)
+            {
+                //If not create new orderLine
+                OrderLine newOrderLine = new OrderLine(loggedInCustomer.findLatestOrder(loggedInCustomer), selectedProduct, comboBoxQuantity.getSelectedIndex()+1);
+                
+                //Adds orderLine to loggedInCustomer
+                loggedInCustomer.findLatestOrder(loggedInCustomer).addOrderLine(newOrderLine);
+                
+                //Updates the orderTotal in the program
+                loggedInCustomer.findLatestOrder(loggedInCustomer).setOrderTotal(loggedInCustomer.findLatestOrder(loggedInCustomer).getOrderTotal() + newOrderLine.getLineTotal());
+
+                //Inserts new orderLine to the database
+                OrderLineDBManager oldb = new OrderLineDBManager();
+                oldb.insertOrderLine(newOrderLine, loggedInCustomer.findLatestOrder(loggedInCustomer).getOrderId());
+                
+                //Updates the orderTotal in the database
+                OrderDBManager odb = new OrderDBManager();
+                odb.updateOrder(loggedInCustomer.findLatestOrder(loggedInCustomer));
+                
+            }
+
+            //Shows user that the product is added
             lblMessage.setText("Added To basket!");
             
+            updateQuantity(selectedProduct);
             
-            int alreadySelected;
-            try
-            {alreadySelected = customerProductQuantities.get(selectedProduct.getProductId());}
-            catch(Exception ex)
-            {alreadySelected = 0;}
-            
-            for (int i = 1; i <= selectedProduct.getStockLevel() - alreadySelected; i++)
-            {comboBoxQuantity.addItem(Integer.toString(i));}
+
         } 
         else { lblMessage.setText("Select Product First"); }
         
     }//GEN-LAST:event_btnAddToBasketActionPerformed
 
     private void btnViewBasketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewBasketActionPerformed
-        Order customerOrder = loggedInCustomer.findLatestOrder();
-        CustomerBasket basket = new CustomerBasket(loggedInCustomer, customerOrder);
+        Order customerOrder = loggedInCustomer.findLatestOrder(loggedInCustomer);
+        CustomerBasket basket = new CustomerBasket(loggedInCustomer);
         basket.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnViewBasketActionPerformed

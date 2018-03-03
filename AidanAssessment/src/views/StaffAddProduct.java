@@ -6,10 +6,10 @@
 
 package views;
 
+import DBManagers.ProductDBManager;
 import java.util.HashMap;
 import javax.swing.ButtonGroup;
 import models.Clothing;
-import models.DBManager;
 import models.Footwear;
 import models.Product;
 import models.Staff;
@@ -31,8 +31,8 @@ public class StaffAddProduct extends javax.swing.JFrame {
         ButtonGroup btnGrp = new ButtonGroup();
         btnGrp.add(rbClothing);
         btnGrp.add(rbFootwear);
-        DBManager db = new DBManager();
-        products = db.loadProducts();
+        ProductDBManager pdb = new ProductDBManager();
+        products = pdb.selectAllProducts();
         loggedInStaff = staff;
         
     }
@@ -222,14 +222,14 @@ public class StaffAddProduct extends javax.swing.JFrame {
 
             
 
-            DBManager db = new DBManager();
+            ProductDBManager pdb = new ProductDBManager();
 
             if (rbClothing.isSelected())
             {
                 try
                 {
                     Clothing newClothing = new Clothing(productID, name, price, stockLevel, additional);
-                    db.registerClothing(newClothing);
+                    pdb.insertClothing(newClothing);
                     lblMessage.setText("New clothing product added");
                 }
                 catch(Exception e)
@@ -243,7 +243,7 @@ public class StaffAddProduct extends javax.swing.JFrame {
                 {
                     int convAdditional = Integer.parseInt(additional);
                     Footwear newFootwear = new Footwear(productID, name, price, stockLevel, convAdditional);
-                    db.registerFootwear(newFootwear);
+                    pdb.insertFootwear(newFootwear);
                     lblMessage.setText("New footwear product added.");
                 }
                 catch(Exception e)

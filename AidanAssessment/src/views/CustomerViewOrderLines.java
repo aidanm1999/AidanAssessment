@@ -1,10 +1,9 @@
 package views;
 
-import java.util.HashMap;
+
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import models.Customer;
-import models.DBManager;
 import models.Order;
 import models.OrderLine;
 
@@ -15,27 +14,25 @@ public class CustomerViewOrderLines extends javax.swing.JFrame {
 
     private Customer loggedInCustomer;
     private Order selectedOrder;
-    private OrderLine selectedOrderLine;
-    private HashMap <Integer, OrderLine> orderLines = new HashMap<>();
     
     
     public CustomerViewOrderLines(Customer customer, Order order) 
     {
         initComponents();
         loggedInCustomer = customer;
+        selectedOrder = order;
         
         DefaultTableModel model = (DefaultTableModel)tblOrderLines.getModel();
         
-        DBManager db = new DBManager();
-        for(Map.Entry<Integer, OrderLine> entry : db.loadOrderLines(order).entrySet())
+        
+        for(Map.Entry<Integer, OrderLine> entry : selectedOrder.getOrderLines().entrySet())
         {
-            selectedOrderLine = entry.getValue();
             model.addRow(new Object[] 
             {
-                selectedOrderLine.getProduct().getProductName(),
-                selectedOrderLine.getProduct().getPrice(),
-                selectedOrderLine.getQuantity(),
-                selectedOrderLine.getLineTotal()
+                entry.getValue().getProduct().getProductName(),
+                entry.getValue().getProduct().getPrice(),
+                entry.getValue().getQuantity(),
+                entry.getValue().getLineTotal()
             });
         }
     }

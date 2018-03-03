@@ -15,7 +15,6 @@ public class CustomerHome extends javax.swing.JFrame {
      */
     
     private Customer loggedInCustomer;
-    private CustomerHome loggedInCustomerHome;
     
     public CustomerHome(Customer customer) 
     {

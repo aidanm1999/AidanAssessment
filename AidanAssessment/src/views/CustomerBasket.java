@@ -5,14 +5,15 @@
  */
 package views;
 
-import java.util.HashMap;
+import DBManagers.CustomerDBManager;
+import DBManagers.OrderDBManager;
+import DBManagers.OrderLineDBManager;
+import DBManagers.ProductDBManager;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import models.Customer;
-import models.DBManager;
 import models.Order;
 import models.OrderLine;
-import models.Product;
 
 /**
  *
@@ -21,41 +22,29 @@ import models.Product;
 public class CustomerBasket extends javax.swing.JFrame {
 
     private Customer loggedInCustomer;
-    private Order customerOrder;
-    private HashMap<Integer, OrderLine> customerOrderLines;
-    private HashMap<Integer, Product> products;
+
     
-    public CustomerBasket(Customer customer, Order order) {
+    public CustomerBasket(Customer customer) {
         initComponents();
         
         loggedInCustomer = customer;
-        customerOrder = order;
-        double totalCost = customerOrder.getOrderTotal();
+
         
-        
-        DBManager db = new DBManager();
-        products = db.loadProducts();
-        
-        customerOrderLines = db.loadOrderLines(customerOrder);
-        
-        customerOrder.setOrderLines(customerOrderLines);
-        
-        for(Map.Entry<Integer, OrderLine> entry : customerOrder.getOrderLines().entrySet())
+        for(Map.Entry<Integer, OrderLine> entry : loggedInCustomer.findLatestOrder(loggedInCustomer).getOrderLines().entrySet())
         {
-            Product orderedProduct = entry.getValue().getProduct();
             DefaultTableModel model = (DefaultTableModel)tblCustomerProducts.getModel();
             model.addRow(new Object[] 
             {
-                orderedProduct.getProductId(),
-                orderedProduct.getProductName(),
-                orderedProduct.getPrice(),
+                entry.getValue().getProduct().getProductId(),
+                entry.getValue().getProduct().getProductName(),
+                entry.getValue().getProduct().getPrice(),
                 entry.getValue().getQuantity(),
-                orderedProduct.getPrice() * entry.getValue().getQuantity(),
+                entry.getValue().getProduct().getPrice() * entry.getValue().getQuantity(),
             });
         }
         
         
-        lblTotalCost.setText("£" + Double.toString(customerOrder.getOrderTotal()));
+        lblTotalCost.setText("£" + Double.toString(loggedInCustomer.findLatestOrder(loggedInCustomer).getOrderTotal()));
     }
         
         
@@ -196,33 +185,68 @@ public class CustomerBasket extends javax.swing.JFrame {
         }
         else
         {
+            //Selects the product id
             DefaultTableModel model = (DefaultTableModel)tblCustomerProducts.getModel();
             int productId = Integer.valueOf(String.valueOf(model.getValueAt(tblCustomerProducts.getSelectedRow(), 0)));
             
-            DBManager db = new DBManager();
-            db.deleteOrderLine(customerOrder.getOrderId(), productId);
-
+            //Selects the orderLine from the product id
+            OrderLine selectedOrderLine = new OrderLine();
+            for(Map.Entry<Integer, OrderLine> olEntry : loggedInCustomer.findLatestOrder(loggedInCustomer).getOrderLines().entrySet())
+            {
+                if(productId == olEntry.getValue().getProduct().getProductId())
+                {
+                    selectedOrderLine = olEntry.getValue();
+                }
+            }
+            
+            //Deletes the selected orderline from the database
+            OrderLineDBManager oldb = new OrderLineDBManager();
+            oldb.deleteOrderLine(selectedOrderLine.getOrderLineId());
+            
+            
+            //Gets the lineTotal
+            double lineTotal = selectedOrderLine.getLineTotal();
+            
+            
+            //Update the orderTotal in the program
+            loggedInCustomer.findLatestOrder(loggedInCustomer).setOrderTotal(loggedInCustomer.findLatestOrder(loggedInCustomer).getOrderTotal()-lineTotal);
+            
+            //Delete the selected orderLine from the program
+            loggedInCustomer.findLatestOrder(loggedInCustomer).getOrderLines().remove(selectedOrderLine.getOrderLineId());
+            
+            //Update the orderTotal in the database
+            OrderDBManager odb = new OrderDBManager();
+            odb.updateOrder(loggedInCustomer.findLatestOrder(loggedInCustomer));
+            
+            //Removes row from the table
             model.removeRow(tblCustomerProducts.getSelectedRow());
 
+            //Sends feedback to user
             lblMessage.setText("Product Has Been Removed");
-            lblTotalCost.setText("£" + String.format("%.02f",loggedInCustomer.findLatestOrder().getOrderTotal()));
+            lblTotalCost.setText("£" + String.format("%.02f",loggedInCustomer.findLatestOrder(loggedInCustomer).getOrderTotal()));
+            
         }
     }//GEN-LAST:event_btnRemoveProductActionPerformed
 
     private void btnPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPurchaseActionPerformed
-        DBManager db = new DBManager();
-        for(Map.Entry<Integer, OrderLine> olEntry : customerOrder.getOrderLines().entrySet())
-        {
-            OrderLine actualOrderLine = olEntry.getValue();
-            
-            //Update stock
-            db.updateStockLevel(actualOrderLine);
-        }
-
-        loggedInCustomer.findLatestOrder().setStatus("Complete");
-        db.completeOrder(customerOrder.getOrderId());
-
-        CustomerConfirmation confirmation = new CustomerConfirmation (loggedInCustomer, customerOrder.getOrderId());
+        OrderDBManager odb = new OrderDBManager();
+        ProductDBManager pdb = new ProductDBManager();
+        
+        //Update stock level in database 
+        pdb.updateProducts(loggedInCustomer.findLatestOrder(loggedInCustomer));
+        
+        
+        //Changes the status of the order to complete
+        Order order = loggedInCustomer.findLatestOrder(loggedInCustomer);
+        order.setStatus("Complete");
+        odb.updateOrder(order);
+        
+        //Reloads the customer to update the updated changes
+        String username = loggedInCustomer.getUsername();
+        CustomerDBManager cdb = new CustomerDBManager();
+        loggedInCustomer = cdb.selectCustomer(username);
+        
+        CustomerConfirmation confirmation = new CustomerConfirmation (loggedInCustomer, order.getOrderId());
         this.dispose();
         confirmation.setVisible(true);
     }//GEN-LAST:event_btnPurchaseActionPerformed
@@ -256,8 +280,7 @@ public class CustomerBasket extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Customer customer = null;
-                Order order = null;
-                new CustomerBasket(customer, order).setVisible(true);
+                new CustomerBasket(customer).setVisible(true);
             }
         });
     }

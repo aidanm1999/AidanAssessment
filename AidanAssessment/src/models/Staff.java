@@ -2,64 +2,37 @@ package models;
 
 public class Staff extends User
 {
+    // <editor-fold defaultstate="collapsed" desc="Attributes">
     private double salary;
     private String position;
+    //</editor-fold>
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
+    public double getSalary() { return salary; }
+    public void setSalary(double salaryIn) { salaryIn = salary; }
+    
+    public String getPosition() { return position; }
+    public void setPosition(String positionIn) { positionIn = position; }
+    //</editor-fold>
 
     
-    
-    
-    
-    public double get_salary() 
-    {
-        return salary;
-    }
-    
-    public String get_position() 
-    {
-        return position;
-    }
-    
-
-
-    
-    
-    
-    
-    
-    public void set_salary(double salary_in) 
-    {
-        salary_in = salary;
-    }
-    
-    public void set_address_line_2(String position_in) 
-    {
-        position_in = position;
-    }
-    
-    
-    
-    
-  
-    
-    
+    // <editor-fold defaultstate="collapsed" desc="Empty Constructor">
     public Staff()
     {
         super();
-        
         salary = 0;
         position = "";
-
     }
+    //</editor-fold>
     
     
-    public Staff(String username_in, String password_in, String first_name_in, String last_name_in, String position_in, double salary_in)
+    // <editor-fold defaultstate="collapsed" desc="Overloaded Constructor">
+    public Staff(String usernameIn, String passwordIn, String firstNameIn, String lastNameIn, String positionIn, double salaryIn)
     {
-
-        super(username_in, password_in, first_name_in, last_name_in);
-        
-        salary = salary_in;
-        position = position_in;
-
-
+        super(usernameIn, passwordIn, firstNameIn, lastNameIn); 
+        salary = salaryIn;
+        position = positionIn;
     }
+    //</editor-fold>
 }

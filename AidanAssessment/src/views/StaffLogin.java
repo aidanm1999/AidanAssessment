@@ -1,19 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package views;
 
-import models.DBManager;
-import models.User;
-import models.Customer;
+import DBManagers.StaffDBManager;
 import models.Staff;
 
-/**
- *
- * @author jahood
- */
+//@author Aidan Marshall
 public class StaffLogin extends javax.swing.JFrame {
 
     /**
@@ -124,24 +114,25 @@ public class StaffLogin extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
+
+        StaffDBManager sdb = new StaffDBManager();
+        Staff staff = sdb.selectStaff(txtUsername.getText());
         
-        DBManager db = new DBManager();
-        Staff staff = db.staffLogIn(username, password);
         
         if(staff == null)
         {
-            lblMessage.setText("Invalid Username And/Or Password");
+            lblMessage.setText("Invalid Username");
         }
-        else
+        else if (staff.getPassword().equals(txtPassword.getText()))
         {
             StaffHome staffHome = new StaffHome(staff);
             this.dispose();
             staffHome.setVisible(true);
         }
-        
-        
+        else
+        {
+            lblMessage.setText("Invalid Password");
+        }
         
         
     }//GEN-LAST:event_btnLoginActionPerformed

@@ -1,68 +1,27 @@
 package models;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+
+// <editor-fold defaultstate="collapsed" desc="Imports">
+    import java.util.Date;
+    import java.util.HashMap;
+    import java.util.Map;
+    //</editor-fold>
 
 
 public class Order 
 {
     
     
-    //Attributes
-    
+    // <editor-fold defaultstate="collapsed" desc="Attributes">
     private int orderId;
     private Date orderDate;
-    private Customer customer;
     private double orderTotal;
     private String status;
     private HashMap<Integer, OrderLine> orderLines;
-      
+    //</editor-fold>
     
-    public void addOrderLine (OrderLine orderLine)
-    {
-        orderTotal = orderTotal + orderLine.getLineTotal();
-        orderLines.put(orderLine.getOrderLineId(), orderLine);
-        DBManager db = new DBManager();
-        db.addOrderLine(orderLine, orderId);
-    }
     
-    public void removeOrderLine(int productId)
-    {
-        Iterator<Map.Entry<Integer, OrderLine>> iter = orderLines.entrySet().iterator();
-        while(iter.hasNext())
-        {
-            Map.Entry<Integer, OrderLine> entry = iter.next();
-            if(entry.getValue().getProduct().getProductId() == productId)
-            {
-                iter.remove();
-                orderTotal = orderTotal - entry.getValue().getLineTotal();
-                DBManager db = new DBManager();
-                
-                db.deleteOrderLine(orderId, productId);
-                db.updateOrderTotal(orderId, -entry.getValue().getLineTotal());
-            }
-        }
-    }
-    
-    public int generateUniqueOrderLineId()
-    {
-        
-        int orderLineId = 0;
-        for(Map.Entry<Integer, OrderLine> orderLineEntry : orderLines.entrySet())
-        {
-            if (orderLines.containsKey(orderLineId))
-            {
-                orderLineId++;
-            }
-        }
-        
-        return orderLineId;
-    }
-    
+    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     public int getOrderId(){return orderId;}
     public void setOrderId(int oId){orderId = oId;}
     
@@ -77,27 +36,10 @@ public class Order
     
     public HashMap<Integer, OrderLine> getOrderLines(){return orderLines;}
     public void setOrderLines(HashMap<Integer, OrderLine> oLines){orderLines = oLines;}
-
-    public Customer getCustomer(){return customer;}
-    public void setOrderLines(Customer cust){customer = cust;}
+    //</editor-fold>
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    //Constrictor Method
-
+    // <editor-fold defaultstate="collapsed" desc="Empty Constructor">
     public Order()
     {
         orderId = 0;
@@ -106,30 +48,51 @@ public class Order
         status = "Opened";
         orderLines = new HashMap<>();
     }
+    //</editor-fold>
     
     
-    //Overloded 
-    
-    public Order(int oId, Date oDate, double oTotal, String oStatus)
+    // <editor-fold defaultstate="collapsed" desc="Overloaded Constructor">
+    public Order(int orderIdIn, Date orderDateIn, double orderTotalIn, String orderStatusIn)
     {
-        orderId = oId;
-        orderDate = oDate;
-        orderTotal = oTotal;
-        status = oStatus;
+        orderId = orderIdIn;
+        orderDate = orderDateIn;
+        orderTotal = orderTotalIn;
+        status = orderStatusIn;
         orderLines = new HashMap<>();
     }
+    //</editor-fold>
     
     
-    
-    
-    
-    public Order(int oId, Date oDate, double oTotal) //For complete orders ONLY
+    // <editor-fold defaultstate="collapsed" desc="Method: addOrderLine">
+    public void addOrderLine (OrderLine orderLine)
     {
-        DBManager db = new DBManager();
-        orderId = oId;
-        orderTotal = oTotal;
-        orderDate = oDate;
-        status = "Complete";
+        //Adds the orderline to the HashMap
+        orderLines.put(orderLine.getOrderLineId(), orderLine);
     }
+    //</editor-fold>
+    //Inputs:   OrderLine orderLine
+    //Outputs:  
     
+    
+    // <editor-fold defaultstate="collapsed" desc="Method: generateUniqueOrderLineId">
+    public int generateUniqueOrderLineId()
+    {
+        //Creates a new unique OrderLineId
+        int orderLineId = 0;
+        for(Map.Entry<Integer, OrderLine> orderLineEntry : orderLines.entrySet())
+        {
+            if (orderLines.containsKey(orderLineId))
+            {
+                orderLineId++;
+            }
+        }
+        
+        return orderLineId;
+    }
+    //</editor-fold>
+    //Inputs:   
+    //Outputs:  int orderLineid
+    
+    
+  
 }
