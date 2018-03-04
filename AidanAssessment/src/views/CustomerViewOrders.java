@@ -143,7 +143,7 @@ public class CustomerViewOrders extends javax.swing.JFrame {
 
     private void btnViewOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrderActionPerformed
         
-        if (selectedOrder.getOrderId() == 0)
+        if (selectedOrder == null)
         {
             lblMessage.setText("Please select an order first");
         }
