@@ -134,7 +134,7 @@ public class CustomerLogin extends javax.swing.JFrame {
         CustomerDBManager cdb = new CustomerDBManager();
         Customer customer = cdb.selectCustomer(txtUsername.getText());
         
-        
+        //Checks if the customer is a valid customer
         if(customer == null)
         {
             lblMessage.setText("Invalid Username");
@@ -186,9 +186,6 @@ public class CustomerLogin extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(CustomerLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

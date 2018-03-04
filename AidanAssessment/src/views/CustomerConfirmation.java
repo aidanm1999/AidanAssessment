@@ -16,10 +16,10 @@ import models.Product;
 public class CustomerConfirmation extends javax.swing.JFrame {
 
     private Customer loggedInCustomer;
-    private Product selectedProduct;
     
     public CustomerConfirmation(Customer customer, int orderID) {
         initComponents();
+        //Displays confirmation message
         loggedInCustomer = customer;
         lblMessage.setText("Order Has Been Placed! Order ID: " + orderID);
         

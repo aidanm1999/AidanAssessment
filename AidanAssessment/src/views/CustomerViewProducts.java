@@ -203,7 +203,7 @@ public class CustomerViewProducts extends javax.swing.JFrame {
 
     private void lstCategoryValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstCategoryValueChanged
         DefaultListModel model = new DefaultListModel();
-
+        //Populates the table
         for(Map.Entry<Integer, Product> productEntry : products.entrySet())
         {
             if(productEntry.getValue().getClass().getName().equals("models." + lstCategory.getSelectedValue()))

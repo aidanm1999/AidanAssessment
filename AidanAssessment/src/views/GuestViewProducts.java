@@ -157,7 +157,8 @@ public class GuestViewProducts extends javax.swing.JFrame {
 
     private void lstCategoryValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstCategoryValueChanged
         DefaultListModel model = new DefaultListModel();
-
+        
+        //Populates the table
         for(Map.Entry<Integer, Product> productEntry : products.entrySet())
         {
             Product actualProduct = productEntry.getValue();

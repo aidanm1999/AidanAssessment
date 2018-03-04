@@ -185,28 +185,29 @@ public class CustomerRegister extends javax.swing.JFrame {
                                                     
         if(!txtUsername.getText().isEmpty() && !txtPassword.getText().isEmpty() && !txtFirstName.getText().isEmpty() && !txtLastName.getText().isEmpty() && !txtAddressLine1.getText().isEmpty() && !txtAddressLine2.getText().isEmpty() && !txtTown.getText().isEmpty() && !txtPostcode.getText().isEmpty())
         {
-                String username = txtUsername.getText();
-                String password = txtPassword.getText();
-                String firstName = txtFirstName.getText();
-                String lastName = txtLastName.getText();
-                String addressLine1 = txtAddressLine1.getText();
-                String addressLine2 = txtAddressLine2.getText();
-                String town = txtTown.getText();
-                String postcode = txtPostcode.getText();
+            //Creates new customer
+            String username = txtUsername.getText();
+            String password = txtPassword.getText();
+            String firstName = txtFirstName.getText();
+            String lastName = txtLastName.getText();
+            String addressLine1 = txtAddressLine1.getText();
+            String addressLine2 = txtAddressLine2.getText();
+            String town = txtTown.getText();
+            String postcode = txtPostcode.getText();
 
 
-                Customer newCustomer = new Customer(username, password, firstName, lastName,  addressLine1,  addressLine2,  town,  postcode);
+            Customer newCustomer = new Customer(username, password, firstName, lastName,  addressLine1,  addressLine2,  town,  postcode);
 
-                CustomerDBManager cdb = new CustomerDBManager();
+            CustomerDBManager cdb = new CustomerDBManager();
 
-                if(cdb.insertCustomer(newCustomer))
-                {
-                        lblMessage.setText("Registration Successful");
-                }
-                else
-                {
-                        lblMessage.setText("ID Already In Use");
-                }
+            if(cdb.insertCustomer(newCustomer))
+            {
+                    lblMessage.setText("Registration Successful");
+            }
+            else
+            {
+                    lblMessage.setText("ID Already In Use");
+            }
         }
         else
         {

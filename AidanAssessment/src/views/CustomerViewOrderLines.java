@@ -24,7 +24,7 @@ public class CustomerViewOrderLines extends javax.swing.JFrame {
         
         DefaultTableModel model = (DefaultTableModel)tblOrderLines.getModel();
         
-        
+        //Pouplates the model
         for(Map.Entry<Integer, OrderLine> entry : selectedOrder.getOrderLines().entrySet())
         {
             model.addRow(new Object[] 

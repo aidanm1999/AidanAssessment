@@ -18,6 +18,7 @@ public class CustomerViewOrders extends javax.swing.JFrame {
         initComponents();
         loggedInCustomer = customer;
         
+        //Populates the table
         DefaultTableModel model = (DefaultTableModel)tblOrders.getModel();
         
         for(Map.Entry<Integer, Order> entry : loggedInCustomer.getOrders().entrySet())

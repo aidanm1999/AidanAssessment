@@ -20,6 +20,7 @@ public class CustomerEditDetails extends javax.swing.JFrame {
         
         txtUsername.setEnabled(false);
         
+        //Populates the text boxes
         txtFirstName.setText(loggedInCustomer.getFirstName());
         txtLastName.setText(loggedInCustomer.getLastName());
         txtUsername.setText(loggedInCustomer.getUsername());
@@ -202,6 +203,7 @@ public class CustomerEditDetails extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoActionPerformed
+        //Undoes any changes made
         txtFirstName.setText(loggedInCustomer.getFirstName());
         txtLastName.setText(loggedInCustomer.getLastName());
         txtUsername.setText(loggedInCustomer.getUsername());
@@ -220,7 +222,7 @@ public class CustomerEditDetails extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReturnActionPerformed
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-
+        //Replaces the details of the customer
         if(!txtUsername.getText().isEmpty() && !txtPassword.getText().isEmpty() && !txtFirstName.getText().isEmpty() && !txtLastName.getText().isEmpty() && !txtAddressLine1.getText().isEmpty() && !txtTown.getText().isEmpty() && !txtPostcode.getText().isEmpty())
         {
             loggedInCustomer.setUsername(txtUsername.getText());

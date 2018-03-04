@@ -29,7 +29,7 @@ public class CustomerBasket extends javax.swing.JFrame {
         
         loggedInCustomer = customer;
 
-        
+        //Populates the table
         for(Map.Entry<Integer, OrderLine> entry : loggedInCustomer.findLatestOrder(loggedInCustomer).getOrderLines().entrySet())
         {
             DefaultTableModel model = (DefaultTableModel)tblCustomerProducts.getModel();
